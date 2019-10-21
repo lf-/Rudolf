@@ -5,13 +5,18 @@ import { updateNode, parsePremises } from '../util/nodes'
 import NodeView from './NodeView'
 import PremiseInput from './PremiseInput'
 import PremisesSelector from './PremisesSelector'
+import { IconButton } from '@material-ui/core'
+import { Undo } from '@material-ui/icons'
 
 const defaultPremises = 'P->Q,P,~Q'
 const exampleTree: TreeNode = parsePremises(defaultPremises.split(','))
 
 const App: React.FC = (): JSX.Element => {
   const [selectedNode, selectNode] = useState<TreeNode | null>(null)
-  const [tree, setTree] = useState<TreeNode>(exampleTree)
+  const [[tree, history], setTree] = useState<[TreeNode, TreeNode[]]>([
+    exampleTree,
+    [],
+  ])
   const [premises, setPremises] = useState<string>(defaultPremises)
 
   const handleNodeChange = ({
@@ -23,18 +28,26 @@ const App: React.FC = (): JSX.Element => {
     label: string
     rule: string
   }) => {
-    setTree((oldTree) =>
+    setTree(([oldTree, history]) => [
       updateNode(oldTree, node, (oldSubTree) => ({
         ...oldSubTree,
         label,
         rule,
-      }))
-    )
+      })),
+      [oldTree, ...history],
+    ])
   }
 
   const handleSubmitPremises = (premises: string) => {
     setPremises(premises)
-    setTree(parsePremises(premises.split(',')))
+    setTree(([oldTree, history]) => [
+      parsePremises(premises.split(',')),
+      [oldTree, ...history],
+    ])
+  }
+
+  const undo = () => {
+    setTree(([_, [previousTree, ...history]]) => [previousTree, history])
   }
 
   return (
@@ -47,13 +60,19 @@ const App: React.FC = (): JSX.Element => {
           onSubmit={handleSubmitPremises}
           setPremises={setPremises}
         />
+        <IconButton onClick={undo} disabled={!history.length}>
+          <Undo />
+        </IconButton>
         <NodeView
           node={tree}
           selectNode={selectNode}
           selectedNode={selectedNode}
           onChange={handleNodeChange}
           updateTree={(node: TreeNode, updater: NodeUpdater) =>
-            setTree(updateNode(tree, node, updater))
+            setTree(([oldTree, history]) => [
+              updateNode(tree, node, updater),
+              [oldTree, ...history],
+            ])
           }
         />
       </main>
