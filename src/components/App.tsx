@@ -1,6 +1,6 @@
 import React, { useState, useReducer, FC } from 'react'
 
-import { NodeUpdater, SharedContext, FormulaNode } from '../typings/TreeState'
+import { NodeUpdater, FormulaNode } from '../typings/TreeState'
 import { parsePremises, updateNode } from '../util/nodes'
 import NodeView from './NodeView'
 import PremiseInput from './PremiseInput'
@@ -8,17 +8,8 @@ import PremisesSelector from './PremisesSelector'
 import { IconButton } from '@material-ui/core'
 import { Undo, Redo } from '@material-ui/icons'
 import { JSONView } from './JSONView'
-
-const initialPremises = 'P->Q,P,~Q'
-const initialTree = parsePremises(initialPremises.split(','), '', 1)
-
-export const initialContext: SharedContext = {
-  nodeFormulas: {},
-  selectedNodeId: null,
-  tree: initialTree,
-}
-
-const Context = React.createContext<SharedContext>(initialContext)
+import { initialContext, initialPremises, Context } from './initialState'
+import { SharedContext } from '../typings/SharedContext'
 
 export type Action =
   | { type: 'setTree'; payload: (tree: FormulaNode) => FormulaNode }
@@ -40,7 +31,6 @@ const reducer = (state: SharedContext, action: Action) => {
 
 const App: FC = (): JSX.Element => {
   const [premises, setPremises] = useState(initialPremises)
-  // const [tree, setTree] = useState(initialTree)
   const [nextRow, setRow] = useState(initialPremises.split(',').length + 1)
   const [context, dispatch] = useReducer(reducer, initialContext)
 

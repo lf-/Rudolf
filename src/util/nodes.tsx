@@ -5,7 +5,7 @@ import {
   TreeNode,
   ClosedLeafNode,
   FinishedLeafNode,
-  FinishingNode,
+  FinishingNode as FinishedNode,
   BranchedNode,
   StackedNode,
   ContradictionNode,
@@ -109,12 +109,12 @@ export const isOpenLeaf = (node: TreeNode | null): node is OpenLeafNode =>
 
 export const isFinishedLeaf = (
   node: FormulaNode | null
-): node is FinishedLeafNode => node != null && node.forest === 'finished'
+): node is FinishedLeafNode => node != null && isFinishedNode(node.forest[0])
 
 export const isContradictionLeaf = (
   node: FormulaNode | null
 ): node is ContradictionLeafNode =>
-  node != null && node.forest === 'contradiction'
+  node != null && isContradictionNode(node.forest[0])
 
 export const isClosedLeaf = (node: TreeNode): node is ClosedLeafNode =>
   isFormulaNode(node) && (isFinishedLeaf(node) || isContradictionLeaf(node))
@@ -123,15 +123,15 @@ export const isFormulaNode = (node: TreeNode): node is FormulaNode => {
   return typeof node === 'object' && 'forest' in node
 }
 
-export const isFinishingNode = (
-  node: TreeNode | FinishingNode | ContradictionNode
-): node is FinishingNode => node === 'finished'
+export const isFinishedNode = (
+  node?: TreeNode | FinishedNode | ContradictionNode
+): node is FinishedNode => node?.rule === 'finished'
 export const isContradictionNode = (
-  node: TreeNode | FinishingNode | ContradictionNode
-): node is ContradictionNode => node === 'contradiction'
+  node?: TreeNode | FinishedNode | ContradictionNode
+): node is ContradictionNode => node?.rule === 'contradiction'
 
 export const isClosingNode = (node: TreeNode): node is ClosingNode =>
-  isFinishingNode(node) || isContradictionNode(node)
+  isFinishedNode(node) || isContradictionNode(node)
 
 export const isStackedNode = (node: FormulaNode): node is StackedNode =>
   node.forest.length === 1
@@ -148,3 +148,6 @@ export const nodeHasChildren = (
     isFormulaNode(node.forest[0])
   )
 }
+
+export const makeContradictionNode = () => ({ rule: 'contradiction' } as const)
+export const makeFinishedNode = () => ({ rule: 'finished' } as const)

@@ -6,23 +6,21 @@
  *  */
 export interface FormulaNode {
   label: string
-  forest: [] | [TreeNode] | [TreeNode, TreeNode] | ClosingNode | FinishingNode
+  forest: [] | [TreeNode] | [TreeNode, TreeNode] | [ClosingNode]
   resolved: boolean
-  rule: string
+  rule: Exclude<string, 'finished' | 'contradiction'>
   id: string
   row: number
 }
 
+export type ContradictionNode = { rule: 'contradiction' }
+export type FinishingNode = { rule: 'finished' }
+export type ClosingNode = ContradictionNode | FinishingNode
+
 export type TreeNode = FormulaNode | FinishingNode | ContradictionNode
 
-type Formula = string
-type Rule = string
-
-export interface SharedContext {
-  selectedNodeId: string | null
-  nodeFormulas: { [id: string]: [Formula, Rule] }
-  tree: FormulaNode
-}
+export type Formula = string
+export type Rule = string
 
 // export interface TreeForm {
 //   value: string
@@ -43,10 +41,6 @@ export type ContradictionLeafNode = FormulaNode & { forest: ContradictionNode }
 export type FinishedLeafNode = FormulaNode & { forest: FinishingNode }
 
 export type ClosedLeafNode = ContradictionLeafNode | FinishedLeafNode
-
-export type ContradictionNode = 'contradiction'
-export type FinishingNode = 'finished'
-export type ClosingNode = ContradictionNode | FinishingNode
 
 export type BranchedNode = FormulaNode & { forest: [FormulaNode, FormulaNode] }
 

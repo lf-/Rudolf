@@ -20,7 +20,8 @@ import {
   FormulaNode,
 } from '../typings/TreeState'
 import { NodeMenu } from './NodeMenu'
-import { initialContext, Action } from './App'
+import { Action } from './App'
+import { initialContext } from './initialState'
 import {
   isClosingNode,
   isStackedNode,

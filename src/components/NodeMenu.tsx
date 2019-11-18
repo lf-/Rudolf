@@ -8,6 +8,8 @@ import {
   makeNode,
   isClosedLeaf,
   isFormulaNode,
+  makeContradictionNode,
+  makeFinishedNode,
 } from '../util/nodes'
 
 type Props = {
@@ -68,13 +70,13 @@ export const NodeMenu: FC<Props> = ({
   const markContradiction = (): void =>
     update((node) => ({
       ...node,
-      forest: 'contradiction',
+      forest: [makeContradictionNode()],
     }))
 
   const markFinished = (): void =>
     update((node) => ({
       ...node,
-      forest: 'finished',
+      forest: [makeFinishedNode()],
     }))
   const reopenBranch = (): void =>
     update((node) => ({
