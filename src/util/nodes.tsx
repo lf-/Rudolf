@@ -39,7 +39,6 @@ export const makeNode = ({
   label,
   forest,
   resolved: false,
-  closed: false,
   rule,
   id,
   row,
@@ -57,9 +56,7 @@ export const appendChildren = (
   if (typeof root.forest === 'string') {
     return root
   } else if (root.forest.length === 0) {
-    return root.closed
-      ? root
-      : { ...root, forest: createNodes(root.id, root.row) }
+    return { ...root, forest: createNodes(root.id, root.row) }
   } else {
     return {
       ...root,
