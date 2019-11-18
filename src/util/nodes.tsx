@@ -5,7 +5,9 @@ import {
   TreeNode,
   ClosedLeafNode,
   FinishedLeafNode,
+  FinishingNode,
 } from '../typings/TreeState'
+import { ContradictionNode } from '../typings/CarnapAPI'
 
 export const makeNode = ({
   label = '',
@@ -117,3 +119,17 @@ export const isContradictionLeaf = (
 
 export const isClosedLeaf = (node: TreeNode) =>
   isFinishedLeaf(node) || isContradictionLeaf(node)
+
+export const isFinishingNode = (forest: TreeNode): forest is FinishingNode =>
+  forest === 'finished'
+export const isContradictionNode = (
+  node: TreeNode
+): node is ContradictionNode => node === 'contradiction'
+
+export const isClosingNode = (node: TreeNode) =>
+  isFinishingNode(node) || isContradictionNode(node)
+
+export const hasSingleChild = (node: TreeNode) => node.forest.length === 1
+
+export const hasTwoChildren = (node: TreeNode): node is BranchedNode =>
+  node.forest.length === 2

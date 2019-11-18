@@ -6,8 +6,7 @@
  *  */
 export interface TreeNode {
   label: string
-  // formulas: TreeForm[]
-  forest: TreeNode[] | 'finished' | 'contradiction'
+  forest: [] | [TreeNode] | [TreeNode, TreeNode] | ClosingNode | FinishingNode
   resolved: boolean
   rule: string
   id: string
@@ -35,6 +34,14 @@ export type NodeUpdater = (node: TreeNode) => TreeNode
 
 export type OpenLeafNode = TreeNode & { forest: [] }
 
-export type ClosedLeafNode = TreeNode & { forest: 'contradiction' }
+export type ClosedLeafNode = TreeNode & { forest: ContradictionNode }
 
-export type FinishedLeafNode = TreeNode & { forest: 'finished' }
+export type FinishedLeafNode = TreeNode & { forest: FinishingNode }
+
+export type ContradictionNode = 'contradiction'
+export type FinishingNode = 'finished'
+export type ClosingNode = ContradictionNode | FinishingNode
+
+export type BranchedNode = TreeNode & { forest: [TreeNode, TreeNode] }
+
+export type StackedNode = TreeNode & { forest: [TreeNode] }

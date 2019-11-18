@@ -16,6 +16,7 @@ import LineTo from 'react-lineto'
 import { NodeUpdater, TreeNode } from '../typings/TreeState'
 import { NodeMenu } from './NodeMenu'
 import { initialContext, Action } from './App'
+import { isClosingNode } from '../util/nodes'
 
 type Props = {
   node: TreeNode
@@ -79,6 +80,10 @@ const NodeView: FC<Props> = ({
   }
   const [label, rule] = nodeFormulas[id]
 
+  if (isClosingNode(node)) {
+    return getClosedMarker(node)
+  }
+
   return (
     <div
       className={`node-container ${selectedNodeId === id ? 'selected' : ''}`}
@@ -115,7 +120,7 @@ const NodeView: FC<Props> = ({
 
       {Array.isArray(node.forest) &&
         node.forest.length > 0 &&
-        (node.forest.length === 1 ? (
+        (isStackedNode(node) ? (
           <div className="children stack">
             <Spacers diff={node.forest[0].row - node.row} />
             <NodeView
