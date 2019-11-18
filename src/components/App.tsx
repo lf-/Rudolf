@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useReducer, FC } from 'react'
 
-import { NodeUpdater, TreeNode } from '../typings/TreeState'
+import { NodeUpdater, TreeNode, SharedContext } from '../typings/TreeState'
 import { parsePremises, updateNode } from '../util/nodes'
 import NodeView from './NodeView'
 import PremiseInput from './PremiseInput'
@@ -12,45 +12,52 @@ import { JSONView } from './JSONView'
 const initialPremises = 'P->Q,P,~Q'
 const initialTree = parsePremises(initialPremises.split(','), '', 1)
 
-const initialState = { selectedNode: null }
+export const initialContext: SharedContext = {
+  nodeFormulas: {},
+  selectedNodeId: null,
+  tree: initialTree,
+}
 
-const TreeContext = React.createContext<{
-  // nodeFormulas: { [id: string]: string }
-  selectedNode: string | null
-}>(initialState)
+const Context = React.createContext<SharedContext>(initialContext)
 
-const App: React.FC = (): JSX.Element => {
-  const [selectedNode, selectNode] = useState<string | null>(null)
+export type Action =
+  | { type: 'setTree'; payload: (tree: TreeNode) => TreeNode }
+  | { type: 'selectNode'; payload: string | null }
+  | { type: 'updateFormula'; payload: { nodeId: string; label: string } }
+  | { type: 'updateRule'; payload: { nodeId: string; rule: string } }
+
+const reducer = (state: SharedContext, action: Action) => {
+  switch (action.type) {
+    case 'setTree':
+      return { ...state, tree: action.payload(state.tree) }
+    case 'selectNode':
+      return { ...state, selectedNodeId: action.payload }
+    default:
+      console.error('unexpected action type', action)
+      return state
+  }
+}
+
+const App: FC = (): JSX.Element => {
   const [premises, setPremises] = useState(initialPremises)
-  const [tree, setTree] = useState(initialTree)
+  // const [tree, setTree] = useState(initialTree)
   const [nextRow, setRow] = useState(initialPremises.split(',').length + 1)
+  const [context, dispatch] = useReducer(reducer, initialContext)
+
+  const { tree } = context
 
   const incrementRow = () => {
     setRow(nextRow + 1)
   }
 
-  const handleNodeChange = ({
-    node,
-    label,
-    rule,
-  }: {
-    node: TreeNode
-    label: string
-    rule: string
-  }) => {
-    setTree((oldTree) =>
-      updateNode(oldTree, node, (oldSubTree) => ({
-        ...oldSubTree,
-        label,
-        rule,
-      }))
-    )
+  const setTree = (updater: (tree: TreeNode) => TreeNode) => {
+    dispatch({ type: 'setTree', payload: updater })
   }
 
   const handleSubmitPremises = (rawInput: string) => {
     setPremises(rawInput)
     const premiseArray = premises.split(',')
-    setTree(parsePremises(premiseArray, '', 1))
+    setTree(() => parsePremises(premiseArray, '', 1))
     setRow(premiseArray.length)
   }
 
@@ -70,19 +77,18 @@ const App: React.FC = (): JSX.Element => {
           <Redo />
         </IconButton>
       </span>
-      <TreeContext.Provider value={{ selectedNode }}>
+      <Context.Provider value={{ ...context }}>
         <NodeView
-          selectNode={selectNode}
+          dispatch={dispatch}
           node={tree}
           nextRow={nextRow}
           incrementRow={incrementRow}
-          onChange={handleNodeChange}
           updateTree={(node: TreeNode, updater: NodeUpdater) =>
-            setTree(updateNode(tree, node, updater))
+            setTree(() => updateNode(tree, node, updater))
           }
         />
         <JSONView {...{ tree }} />
-      </TreeContext.Provider>
+      </Context.Provider>
     </main>
   )
 }

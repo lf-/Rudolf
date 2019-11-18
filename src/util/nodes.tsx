@@ -7,25 +7,6 @@ import {
   FinishedLeafNode,
 } from '../typings/TreeState'
 
-/**
- *
- * @param root
- * @param selectedNode
- * @param newNodes
- * 1. Mark the currently selected node as resolved.
- * 2. Append the new nodes to the bottom of all open branches.
- *  (For now, this can just be all branches, since we don't have
- *  a way of marking branches as open/closed yet.)
- */
-export const decomposeNode = (
-  root: TreeNode,
-  selectedNode: TreeNode,
-  nodeInput: [string, string]
-): TreeNode => {
-  const createNodes = getNodeGenerator(nodeInput)
-  return resolveSelectedNode(root, selectedNode, createNodes)
-}
-
 export const makeNode = ({
   label = '',
   forest = [],
@@ -66,12 +47,6 @@ export const appendChildren = (
     }
   }
 }
-/**
- *
- * @param root - The node to mark as resolved.
- * Mark the currently selected node as resolved.
- */
-const markResolved = (root: TreeNode) => ({ ...root, resolved: true })
 
 /**
  *
@@ -110,35 +85,12 @@ const makeBranch = (
   })
 }
 
-const getNodeGenerator = ([leftBranchInput, rightBranchInput]: [
-  string,
-  string
-]) => (parentId: string, parentRow: number) => {
-  const leftBranch = makeBranch(leftBranchInput.split(','), parentId, parentRow)
-  const rightBranch = makeBranch(
-    rightBranchInput.split(','),
-    parentId,
-    parentRow
-  )
-  return [leftBranch, rightBranch].filter(
-    (maybeNode: TreeNode | null): maybeNode is TreeNode => maybeNode != null
-  )
-}
-const resolveSelectedNode = (
-  root: TreeNode,
-  selectedNode: TreeNode,
-  createNodes: NodeGenerator
-): TreeNode =>
-  updateNode(root, selectedNode, (node) =>
-    appendChildren(markResolved(node), createNodes)
-  )
-
 export const updateNode = (
   root: TreeNode,
-  selectedNode: TreeNode,
+  targetNode: TreeNode,
   updater: NodeUpdater
 ): TreeNode => {
-  if (root === selectedNode) {
+  if (root === targetNode) {
     return updater({ ...root })
   } else if (typeof root.forest === 'string') {
     return root
@@ -146,7 +98,7 @@ export const updateNode = (
     return {
       ...root,
       forest: root.forest.map((child) =>
-        updateNode(child, selectedNode, updater)
+        updateNode(child, targetNode, updater)
       ),
     }
   }

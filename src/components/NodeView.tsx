@@ -8,20 +8,21 @@ import React, {
   useRef,
   useState,
   useContext,
+  Dispatch,
 } from 'react'
 import AutoSizeInput from 'react-input-autosize'
 import LineTo from 'react-lineto'
 
 import { NodeUpdater, TreeNode } from '../typings/TreeState'
 import { NodeMenu } from './NodeMenu'
+import { initialContext, Action } from './App'
 
 type Props = {
   node: TreeNode
-  selectNode: (_: string) => void
-  onChange: (_: { node: TreeNode; label: string; rule: string }) => void
   updateTree: (node: TreeNode, updater: NodeUpdater) => void
   nextRow: number
   incrementRow: () => void
+  dispatch: Dispatch<Action>
 }
 
 const Spacers = ({ diff }: { diff: number }) => {
@@ -34,28 +35,29 @@ const Spacers = ({ diff }: { diff: number }) => {
   return <>{spacers}</>
 }
 
-const Context = React.createContext<{ selectedNode: null | string }>({
-  selectedNode: null,
-})
+const context = React.createContext(initialContext)
 
 const NodeView: FC<Props> = ({
   node,
   node: { id },
-  selectNode,
-  onChange,
   updateTree,
   nextRow,
   incrementRow,
+  dispatch,
 }) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const nodeRef: Ref<HTMLDivElement> = useRef(null)
-  const { selectedNode } = useContext(Context)
+  const { selectedNodeId, nodeFormulas } = useContext(context)
 
   const handleLabelChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    onChange({
-      node,
-      label: event.currentTarget.value,
-      rule: node.rule,
+    // onChange({
+    //   node,
+    //   label: event.currentTarget.value,
+    //   rule: rule,
+    // })
+    dispatch({
+      type: 'updateFormula',
+      payload: { nodeId: id, label: event.currentTarget.value },
     })
   }
 
@@ -65,18 +67,25 @@ const NodeView: FC<Props> = ({
   }
 
   const handleRuleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    onChange({
-      node,
-      label: node.label,
-      rule: event.currentTarget.value,
+    // onChange({
+    //   node,
+    //   label: label,
+    //   rule: event.currentTarget.value,
+    // })
+    dispatch({
+      type: 'updateRule',
+      payload: { nodeId: id, rule: event.currentTarget.value },
     })
   }
+  const [label, rule] = nodeFormulas[id]
 
   return (
-    <div className={`node-container ${selectedNode === id ? 'selected' : ''}`}>
+    <div
+      className={`node-container ${selectedNodeId === id ? 'selected' : ''}`}
+    >
       <div
         className={`node node-id=${id} ${
-          selectedNode === id ? 'selected' : ''
+          selectedNodeId === id ? 'selected' : ''
         } `}
         onContextMenu={handleContextMenu}
         ref={nodeRef}
@@ -85,14 +94,14 @@ const NodeView: FC<Props> = ({
         <input
           className="label"
           onChange={handleLabelChange}
-          value={node.label}
+          value={label}
           placeholder="formula"
         />
         (
         <AutoSizeInput
           className="rule"
           onChange={handleRuleChange}
-          value={node.rule}
+          value={rule}
           placeholder="rule"
         />
         ){node.resolved ? <Check /> : ''}
@@ -112,9 +121,8 @@ const NodeView: FC<Props> = ({
             <NodeView
               {...{
                 node: node.forest[0],
-                selectedNode,
-                selectNode,
-                onChange,
+                dispatch,
+                selectedNodeId,
                 updateTree,
                 nextRow,
                 incrementRow,
@@ -137,9 +145,8 @@ const NodeView: FC<Props> = ({
                   />
                   <NodeView
                     {...{
+                      dispatch,
                       node: child,
-                      selectNode,
-                      onChange,
                       updateTree,
                       nextRow,
                       incrementRow,

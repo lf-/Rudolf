@@ -14,6 +14,15 @@ export interface TreeNode {
   row: number
 }
 
+type Formula = string
+type Rule = string
+
+export interface SharedContext {
+  selectedNodeId: string | null
+  nodeFormulas: { [id: string]: [Formula, Rule] }
+  tree: TreeNode
+}
+
 // export interface TreeForm {
 //   value: string
 //   resolved: boolean

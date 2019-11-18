@@ -5305,10 +5305,22 @@ ignore@^4.0.6:
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-4.0.6.tgz#750e3db5862087b4737ebac8207ffd1ef27b25fc"
   integrity sha512-cyFDKrqc/YdcWFniJhzI42+AzS+gNwmUzOSFcRCQYwySuBBBy/KjuxWLZ/FHEH6Moq1NizMOBWyTcv8O4OZIMg==
 
+immer-reducer@^0.7.9:
+  version "0.7.9"
+  resolved "https://registry.yarnpkg.com/immer-reducer/-/immer-reducer-0.7.9.tgz#c60b5db9b0814d5238d669921510418dcae505fc"
+  integrity sha512-O+e9S/h6o3M6ZIlBZiIRzRS5xmkCeoljtbkIiU/KcRU9WU3sejcCkqC8/mM8bYOZRyJl9TFOul6ZPjg+t4SwVA==
+  dependencies:
+    immer "^1.4.0 || ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0"
+
 immer@1.10.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/immer/-/immer-1.10.0.tgz#bad67605ba9c810275d91e1c2a47d4582e98286d"
   integrity sha512-O3sR1/opvCDGLEVcvrGTMtLac8GJ5IwZC4puPrLuRj3l7ICKvkmA0vGuU9OW8mV9WIBRnaxp5GJh9IEAaNOoYg==
+
+"immer@^1.4.0 || ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-5.0.0.tgz#07f462b7d95f7e86c214a861ecacd766d42b8c0a"
+  integrity sha512-G7gRqKbi9NE025XVyqyTV98dxUOtdKvu/P1QRaVZfA55aEcXgjbxPdm+TlWdcSMNPKijlaHNz61DGPyelouRlA==
 
 import-cwd@^2.0.0:
   version "2.1.0"
