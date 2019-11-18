@@ -6,8 +6,13 @@ import {
   ClosedLeafNode,
   FinishedLeafNode,
   FinishingNode,
+  BranchedNode,
+  StackedNode,
+  ContradictionNode,
+  FormulaNode,
+  ClosingNode,
+  ContradictionLeafNode,
 } from '../typings/TreeState'
-import { ContradictionNode } from '../typings/CarnapAPI'
 
 export const makeNode = ({
   label = '',
@@ -15,10 +20,10 @@ export const makeNode = ({
   rule = '',
   id,
   row,
-}: Partial<TreeNode> & {
+}: Partial<FormulaNode> & {
   id: string
   row: number
-}): TreeNode => ({
+}): FormulaNode => ({
   label,
   forest,
   resolved: false,
@@ -33,20 +38,22 @@ export const makeNode = ({
  * @param newNodes nodes to append, as-is, to the bottom of all open branches.
  */
 export const appendChildren = (
-  root: TreeNode,
+  root: FormulaNode,
   createNodes: NodeGenerator
-): TreeNode => {
-  if (typeof root.forest === 'string') {
+): FormulaNode => {
+  if (isClosedLeaf(root)) {
     return root
-  } else if (root.forest.length === 0) {
+  } else if (isOpenLeaf(root)) {
     return { ...root, forest: createNodes(root.id, root.row) }
-  } else {
+  } else if (nodeHasChildren(root)) {
     return {
       ...root,
-      forest: root.forest.map<TreeNode>((child: TreeNode) =>
+      forest: root.forest.map<TreeNode>((child: FormulaNode) =>
         appendChildren(child, createNodes)
-      ),
+      ) as [FormulaNode] | [FormulaNode, FormulaNode],
     }
+  } else {
+    return root
   }
 }
 
@@ -58,7 +65,7 @@ export const parsePremises = (
   formulas: string[],
   parentId: string,
   row: number
-): TreeNode => {
+): FormulaNode => {
   const id = `${parentId}0`
   return makeNode({
     label: formulas[0],
@@ -72,64 +79,72 @@ export const parsePremises = (
   })
 }
 
-const makeBranch = (
-  formulas: string[],
-  parentId: string,
-  parentRow: number
-): TreeNode => {
-  const id = `${parentId}0`
-  const row = parentRow + 1
-  return makeNode({
-    label: formulas[0],
-    forest: [makeBranch(formulas.slice(1), id, row)],
-    id,
-    row,
-  })
-}
-
 export const updateNode = (
-  root: TreeNode,
-  targetNode: TreeNode,
+  root: FormulaNode,
+  targetNode: FormulaNode,
   updater: NodeUpdater
-): TreeNode => {
+): FormulaNode => {
   if (root === targetNode) {
     return updater({ ...root })
-  } else if (typeof root.forest === 'string') {
+  } else if (isClosingNode(root)) {
     return root
-  } else {
+  } else if (nodeHasChildren(root)) {
     return {
       ...root,
-      forest: root.forest.map((child) =>
+      forest: root.forest.map((child: FormulaNode) =>
         updateNode(child, targetNode, updater)
-      ),
+      ) as [FormulaNode] | [FormulaNode],
     }
+  } else {
+    console.error('Attempted invalid node update')
+    return root
   }
 }
 
 export const isOpenLeaf = (node: TreeNode | null): node is OpenLeafNode =>
-  node != null && Array.isArray(node.forest) && node.forest.length === 0
+  node != null &&
+  isFormulaNode(node) &&
+  Array.isArray(node.forest) &&
+  node.forest.length === 0
 
 export const isFinishedLeaf = (
-  node: TreeNode | null
+  node: FormulaNode | null
 ): node is FinishedLeafNode => node != null && node.forest === 'finished'
 
 export const isContradictionLeaf = (
-  node: TreeNode | null
-): node is ClosedLeafNode => node != null && node.forest === 'contradiction'
+  node: FormulaNode | null
+): node is ContradictionLeafNode =>
+  node != null && node.forest === 'contradiction'
 
-export const isClosedLeaf = (node: TreeNode) =>
-  isFinishedLeaf(node) || isContradictionLeaf(node)
+export const isClosedLeaf = (node: TreeNode): node is ClosedLeafNode =>
+  isFormulaNode(node) && (isFinishedLeaf(node) || isContradictionLeaf(node))
 
-export const isFinishingNode = (forest: TreeNode): forest is FinishingNode =>
-  forest === 'finished'
+export const isFormulaNode = (node: TreeNode): node is FormulaNode => {
+  return typeof node === 'object' && 'forest' in node
+}
+
+export const isFinishingNode = (
+  node: TreeNode | FinishingNode | ContradictionNode
+): node is FinishingNode => node === 'finished'
 export const isContradictionNode = (
-  node: TreeNode
+  node: TreeNode | FinishingNode | ContradictionNode
 ): node is ContradictionNode => node === 'contradiction'
 
-export const isClosingNode = (node: TreeNode) =>
+export const isClosingNode = (node: TreeNode): node is ClosingNode =>
   isFinishingNode(node) || isContradictionNode(node)
 
-export const hasSingleChild = (node: TreeNode) => node.forest.length === 1
+export const isStackedNode = (node: FormulaNode): node is StackedNode =>
+  node.forest.length === 1
 
-export const hasTwoChildren = (node: TreeNode): node is BranchedNode =>
+export const isBranchedNode = (node: FormulaNode): node is BranchedNode =>
   node.forest.length === 2
+
+export const nodeHasChildren = (
+  node: TreeNode
+): node is StackedNode | BranchedNode => {
+  return (
+    isFormulaNode(node) &&
+    (isStackedNode(node) || isBranchedNode(node)) &&
+    isFormulaNode(node.forest[0])
+  )
+}

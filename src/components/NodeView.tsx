@@ -13,14 +13,24 @@ import React, {
 import AutoSizeInput from 'react-input-autosize'
 import LineTo from 'react-lineto'
 
-import { NodeUpdater, TreeNode } from '../typings/TreeState'
+import {
+  NodeUpdater,
+  TreeNode,
+  ClosingNode,
+  FormulaNode,
+} from '../typings/TreeState'
 import { NodeMenu } from './NodeMenu'
 import { initialContext, Action } from './App'
-import { isClosingNode } from '../util/nodes'
+import {
+  isClosingNode,
+  isStackedNode,
+  nodeHasChildren,
+  isContradictionNode,
+} from '../util/nodes'
 
 type Props = {
   node: TreeNode
-  updateTree: (node: TreeNode, updater: NodeUpdater) => void
+  updateTree: (node: FormulaNode, updater: NodeUpdater) => void
   nextRow: number
   incrementRow: () => void
   dispatch: Dispatch<Action>
@@ -40,7 +50,6 @@ const context = React.createContext(initialContext)
 
 const NodeView: FC<Props> = ({
   node,
-  node: { id },
   updateTree,
   nextRow,
   incrementRow,
@@ -78,11 +87,22 @@ const NodeView: FC<Props> = ({
       payload: { nodeId: id, rule: event.currentTarget.value },
     })
   }
-  const [label, rule] = nodeFormulas[id]
+
+  const getClosedMarker = (node: ClosingNode) => {
+    return isContradictionNode(node) ? (
+      <div className="closed-branch-marker contradiction ">X</div>
+    ) : (
+      <div className="closed-branch-marker finished">O</div>
+    )
+  }
 
   if (isClosingNode(node)) {
     return getClosedMarker(node)
   }
+
+  const { id } = node
+
+  const [label, rule] = nodeFormulas[id]
 
   return (
     <div
@@ -110,16 +130,10 @@ const NodeView: FC<Props> = ({
           placeholder="rule"
         />
         ){node.resolved ? <Check /> : ''}
-        {node.forest === 'contradiction' && (
-          <div className="closed-branch-marker">X</div>
-        )}
-        {node.forest === 'finished' && (
-          <div className="finished-branch-marker">O</div>
-        )}
       </div>
 
-      {Array.isArray(node.forest) &&
-        node.forest.length > 0 &&
+      {!isClosingNode(node) &&
+        nodeHasChildren(node) &&
         (isStackedNode(node) ? (
           <div className="children stack">
             <Spacers diff={node.forest[0].row - node.row} />

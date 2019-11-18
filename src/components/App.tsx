@@ -1,6 +1,6 @@
 import React, { useState, useReducer, FC } from 'react'
 
-import { NodeUpdater, TreeNode, SharedContext } from '../typings/TreeState'
+import { NodeUpdater, SharedContext, FormulaNode } from '../typings/TreeState'
 import { parsePremises, updateNode } from '../util/nodes'
 import NodeView from './NodeView'
 import PremiseInput from './PremiseInput'
@@ -21,7 +21,7 @@ export const initialContext: SharedContext = {
 const Context = React.createContext<SharedContext>(initialContext)
 
 export type Action =
-  | { type: 'setTree'; payload: (tree: TreeNode) => TreeNode }
+  | { type: 'setTree'; payload: (tree: FormulaNode) => FormulaNode }
   | { type: 'selectNode'; payload: string | null }
   | { type: 'updateFormula'; payload: { nodeId: string; label: string } }
   | { type: 'updateRule'; payload: { nodeId: string; rule: string } }
@@ -50,7 +50,7 @@ const App: FC = (): JSX.Element => {
     setRow(nextRow + 1)
   }
 
-  const setTree = (updater: (tree: TreeNode) => TreeNode) => {
+  const setTree = (updater: (tree: FormulaNode) => FormulaNode) => {
     dispatch({ type: 'setTree', payload: updater })
   }
 
@@ -83,7 +83,7 @@ const App: FC = (): JSX.Element => {
           node={tree}
           nextRow={nextRow}
           incrementRow={incrementRow}
-          updateTree={(node: TreeNode, updater: NodeUpdater) =>
+          updateTree={(node: FormulaNode, updater: NodeUpdater) =>
             setTree(() => updateNode(tree, node, updater))
           }
         />

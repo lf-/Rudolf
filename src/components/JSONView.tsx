@@ -1,9 +1,14 @@
 import React, { FC } from 'react'
 import { TextareaAutosize } from '@material-ui/core'
-import { TreeNode } from '../typings/TreeState'
-import { FormulaNode } from '../typings/CarnapAPI'
+import { FormulaNode } from '../typings/TreeState'
+import { OutputFormulaNode } from '../typings/CarnapAPI'
+import {
+  isContradictionLeaf,
+  isFinishedLeaf,
+  nodeHasChildren,
+} from '../util/nodes'
 
-export const JSONView: FC<{ tree: TreeNode }> = ({ tree }) => (
+export const JSONView: FC<{ tree: FormulaNode }> = ({ tree }) => (
   <TextareaAutosize
     className="json-view"
     value={JSON.stringify(transformTree(tree), null, '\t')}
@@ -13,19 +18,21 @@ export const JSONView: FC<{ tree: TreeNode }> = ({ tree }) => (
 const transformNode = ({
   forest: _,
   ...tree
-}: TreeNode): Omit<FormulaNode, 'forest'> => {
+}: FormulaNode): Omit<OutputFormulaNode, 'forest'> => {
   return { ...tree, formulas: [], nodeType: 'formulas' }
 }
 
-const transformTree = <T extends TreeNode>(tree: TreeNode): FormulaNode => {
-  if (tree.forest === 'contradiction')
+const transformTree = <T extends FormulaNode>(
+  tree: FormulaNode
+): OutputFormulaNode => {
+  if (isContradictionLeaf(tree))
     return {
       ...transformNode(tree),
       forest: [
         { rule: 'contradiction', nodeType: 'contradiction', formulas: [] },
       ],
     }
-  else if (tree.forest === 'finished') {
+  else if (isFinishedLeaf(tree)) {
     return {
       ...transformNode(tree),
       forest: [
@@ -36,9 +43,12 @@ const transformTree = <T extends TreeNode>(tree: TreeNode): FormulaNode => {
         },
       ],
     }
-  } else
+  } else if (nodeHasChildren(tree)) {
     return {
       ...transformNode(tree),
       forest: tree.forest.map(transformTree),
     }
+  } else {
+    return { ...transformNode(tree), forest: [] }
+  }
 }

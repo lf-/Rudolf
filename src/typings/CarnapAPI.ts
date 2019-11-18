@@ -14,24 +14,27 @@ export interface TreeForm {
   value: string
 }
 
-export type OutputNode = FormulaNode | ContradictionNode | FinishedNode
+export type OutputNode =
+  | OutputFormulaNode
+  | OutputContradictionNode
+  | OutputFinishedNode
 
-export type FormulaNode = {
+export type OutputFormulaNode = {
   nodeType: 'formulas'
-  forest: OutputNode[] | [FinishedNode] | [ContradictionNode]
+  forest: OutputNode[] | [OutputFinishedNode] | [OutputContradictionNode]
   formulas: TreeForm[]
   rule: string
 }
 
-// We mark a branch as closed by adding a
+// We mark a branch as closed by adding a special closing node
 
-export type FinishedNode = {
+export type OutputFinishedNode = {
   nodeType: 'finished'
   formulas: []
   rule: string // ['O', ...number[]] // List of resolved rows? on the branch
 }
 
-export type ContradictionNode = {
+export type OutputContradictionNode = {
   nodeType: 'contradiction'
   formulas: []
   rule: string // ['X', number, number] e.g X

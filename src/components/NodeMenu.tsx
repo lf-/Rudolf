@@ -1,18 +1,19 @@
 import { Menu, MenuItem } from '@material-ui/core'
 import React, { FC } from 'react'
 
-import { NodeUpdater, TreeNode } from '../typings/TreeState'
+import { NodeUpdater, TreeNode, FormulaNode } from '../typings/TreeState'
 import {
   appendChildren,
   isOpenLeaf,
   makeNode,
   isClosedLeaf,
+  isFormulaNode,
 } from '../util/nodes'
 
 type Props = {
   node: TreeNode
   onClose: () => void
-  updateTree: (node: TreeNode, updater: NodeUpdater) => void
+  updateTree: (node: FormulaNode, updater: NodeUpdater) => void
   open: boolean
   anchorEl: Element
   nextRow: number
@@ -29,7 +30,7 @@ export const NodeMenu: FC<Props> = ({
   incrementRow,
 }) => {
   const update = (updater: NodeUpdater) => {
-    updateTree(node, updater)
+    isFormulaNode(node) && updateTree(node, updater)
     close()
   }
 
@@ -83,11 +84,15 @@ export const NodeMenu: FC<Props> = ({
 
   return (
     <Menu open={open} anchorEl={anchorEl} onClose={close}>
-      <MenuItem onClick={handleContinue}>Continue Branch</MenuItem>
-      <MenuItem onClick={handleSplit}>Split Branch</MenuItem>
-      <MenuItem onClick={toggleResolved}>
-        Mark as {node.resolved ? 'Un' : ''}Resolved
-      </MenuItem>
+      {isFormulaNode(node) && (
+        <>
+          <MenuItem onClick={handleContinue}>Continue Branch</MenuItem>
+          <MenuItem onClick={handleSplit}>Split Branch</MenuItem>
+          <MenuItem onClick={toggleResolved}>
+            Mark as {node.resolved ? 'Un' : ''}Resolved
+          </MenuItem>
+        </>
+      )}
       {isOpenLeaf(node) && (
         <MenuItem onClick={markContradiction}>
           Close Branch With Contradiction
