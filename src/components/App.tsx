@@ -10,13 +10,19 @@ import { Undo, Redo } from '@material-ui/icons'
 import { JSONView } from './JSONView'
 
 const initialPremises = 'P->Q,P,~Q'
+const initialTree = parsePremises(initialPremises.split(','), '', 1)
+
+const initialState = { selectedNode: null }
+
+const TreeContext = React.createContext<{
+  // nodeFormulas: { [id: string]: string }
+  selectedNode: string | null
+}>(initialState)
 
 const App: React.FC = (): JSX.Element => {
-  const [selectedNode, selectNode] = useState<TreeNode | null>(null)
+  const [selectedNode, selectNode] = useState<string | null>(null)
   const [premises, setPremises] = useState(initialPremises)
-  const [tree, setTree] = useState(
-    parsePremises(initialPremises.split(','), '', 1)
-  )
+  const [tree, setTree] = useState(initialTree)
   const [nextRow, setRow] = useState(initialPremises.split(',').length + 1)
 
   const incrementRow = () => {
@@ -64,18 +70,19 @@ const App: React.FC = (): JSX.Element => {
           <Redo />
         </IconButton>
       </span>
-      <NodeView
-        node={tree}
-        selectNode={selectNode}
-        nextRow={nextRow}
-        incrementRow={incrementRow}
-        selectedNode={selectedNode}
-        onChange={handleNodeChange}
-        updateTree={(node: TreeNode, updater: NodeUpdater) =>
-          setTree(updateNode(tree, node, updater))
-        }
-      />
-      <JSONView {...{ tree }} />
+      <TreeContext.Provider value={{ selectedNode }}>
+        <NodeView
+          selectNode={selectNode}
+          node={tree}
+          nextRow={nextRow}
+          incrementRow={incrementRow}
+          onChange={handleNodeChange}
+          updateTree={(node: TreeNode, updater: NodeUpdater) =>
+            setTree(updateNode(tree, node, updater))
+          }
+        />
+        <JSONView {...{ tree }} />
+      </TreeContext.Provider>
     </main>
   )
 }

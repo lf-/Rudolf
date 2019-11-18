@@ -7,6 +7,7 @@ import React, {
   Ref,
   useRef,
   useState,
+  useContext,
 } from 'react'
 import AutoSizeInput from 'react-input-autosize'
 import LineTo from 'react-lineto'
@@ -16,8 +17,7 @@ import { NodeMenu } from './NodeMenu'
 
 type Props = {
   node: TreeNode
-  selectedNode: TreeNode | null
-  selectNode: (_: TreeNode) => void
+  selectNode: (_: string) => void
   onChange: (_: { node: TreeNode; label: string; rule: string }) => void
   updateTree: (node: TreeNode, updater: NodeUpdater) => void
   nextRow: number
@@ -34,9 +34,13 @@ const Spacers = ({ diff }: { diff: number }) => {
   return <>{spacers}</>
 }
 
+const Context = React.createContext<{ selectedNode: null | string }>({
+  selectedNode: null,
+})
+
 const NodeView: FC<Props> = ({
   node,
-  selectedNode,
+  node: { id },
   selectNode,
   onChange,
   updateTree,
@@ -45,6 +49,7 @@ const NodeView: FC<Props> = ({
 }) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const nodeRef: Ref<HTMLDivElement> = useRef(null)
+  const { selectedNode } = useContext(Context)
 
   const handleLabelChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     onChange({
@@ -68,12 +73,10 @@ const NodeView: FC<Props> = ({
   }
 
   return (
-    <div
-      className={`node-container ${selectedNode === node ? 'selected' : ''}`}
-    >
+    <div className={`node-container ${selectedNode === id ? 'selected' : ''}`}>
       <div
-        className={`node node-id=${node.id} ${
-          selectedNode === node ? 'selected' : ''
+        className={`node node-id=${id} ${
+          selectedNode === id ? 'selected' : ''
         } `}
         onContextMenu={handleContextMenu}
         ref={nodeRef}
@@ -135,7 +138,6 @@ const NodeView: FC<Props> = ({
                   <NodeView
                     {...{
                       node: child,
-                      selectedNode,
                       selectNode,
                       onChange,
                       updateTree,
