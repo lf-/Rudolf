@@ -1,7 +1,7 @@
 import { Menu, MenuItem } from '@material-ui/core'
-import React, { FC } from 'react'
+import React, { FC, useContext } from 'react'
 
-import { FormulaNode, NodeUpdater, TreeNode } from '../typings/Trees'
+import { NodeUpdater, TreeNode } from '../typings/Trees'
 import {
   appendChildren,
   isClosedLeaf,
@@ -11,31 +11,28 @@ import {
   makeFinishedNode,
   makeNode,
 } from '../util/nodes'
-import { CustomDispatch, actions } from './reducer'
+import { actions, CustomDispatch } from './reducer'
+import { Context } from './initialState'
 
 type Props = {
   node: TreeNode
   onClose: () => void
-  updateTree: (node: FormulaNode, updater: NodeUpdater) => void
   open: boolean
   anchorEl: Element
-  nextRow: number
-  incrementRow: () => void
   dispatch: CustomDispatch
 }
 
 export const NodeMenu: FC<Props> = ({
   open,
   node,
-  updateTree,
   anchorEl,
   onClose: close,
-  nextRow,
-  incrementRow,
   dispatch,
 }) => {
+  const { nextRow } = useContext(Context)
+
   const update = (updater: NodeUpdater) => {
-    isFormulaNode(node) && updateTree(node, updater)
+    isFormulaNode(node) && dispatch(actions.updateAtNode(node.id, updater))
     close()
   }
 
@@ -71,12 +68,12 @@ export const NodeMenu: FC<Props> = ({
   }
 
   const handleSplit = (): void => {
-    incrementRow()
+    dispatch(actions.incrementRow())
     update(splitBranchUpdater)
   }
 
   const handleContinue = (): void => {
-    incrementRow()
+    dispatch(actions.incrementRow())
     update(continueBranchUpdater)
   }
 

@@ -8,10 +8,15 @@ import {
 import { SharedContext } from '../typings/AppState'
 import { NodeUpdater } from '../typings/Trees'
 import { Dispatch } from 'react'
+import { updateNode } from '../util/nodes'
 
 export class RudolfReducer extends ImmerReducer<SharedContext> {
-  setTree(updater: NodeUpdater) {
+  updateTree(updater: NodeUpdater) {
     this.draftState.tree = updater(this.draftState.tree)
+  }
+
+  updateAtNode(id: string, updater: NodeUpdater) {
+    this.draftState.tree = updateNode(this.draftState.tree, id, updater)
   }
 
   selectNode(id: string | null) {
@@ -30,6 +35,14 @@ export class RudolfReducer extends ImmerReducer<SharedContext> {
 
   updateRule(id: string, rule: string) {
     this.draftState.nodeRules[id] = rule
+  }
+
+  incrementRow() {
+    this.draftState.nextRow += 1
+  }
+
+  setRow(row: number) {
+    this.draftState.nextRow = row
   }
 }
 

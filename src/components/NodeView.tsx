@@ -12,12 +12,7 @@ import React, {
 import AutoSizeInput from 'react-input-autosize'
 import LineTo from 'react-lineto'
 
-import {
-  NodeUpdater,
-  TreeNode,
-  ClosingNode,
-  FormulaNode,
-} from '../typings/Trees'
+import { TreeNode, ClosingNode } from '../typings/Trees'
 import { NodeMenu } from './NodeMenu'
 import { Context } from './initialState'
 import {
@@ -30,9 +25,6 @@ import { actions, CustomDispatch } from './reducer'
 
 type Props = {
   node: TreeNode
-  updateTree: (node: FormulaNode, updater: NodeUpdater) => void
-  nextRow: number
-  incrementRow: () => void
   dispatch: CustomDispatch
 }
 
@@ -46,16 +38,12 @@ const Spacers = ({ diff }: { diff: number }) => {
   return <>{spacers}</>
 }
 
-const NodeView: FC<Props> = ({
-  node,
-  updateTree,
-  nextRow,
-  incrementRow,
-  dispatch,
-}) => {
+const NodeView: FC<Props> = ({ node, dispatch }) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const nodeRef: Ref<HTMLDivElement> = useRef(null)
-  const { selectedNodeId, nodeFormulas, nodeRules } = useContext(Context)
+  const { selectedNodeId, nodeFormulas, nodeRules, nextRow } = useContext(
+    Context
+  )
 
   const handleLabelChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     dispatch(actions.updateFormula(id, event.currentTarget.value))
@@ -125,9 +113,7 @@ const NodeView: FC<Props> = ({
                 node: node.forest[0],
                 dispatch,
                 selectedNodeId,
-                updateTree,
                 nextRow,
-                incrementRow,
               }}
             />
           </div>
@@ -149,9 +135,7 @@ const NodeView: FC<Props> = ({
                     {...{
                       dispatch,
                       node: child,
-                      updateTree,
                       nextRow,
-                      incrementRow,
                     }}
                   />
                 </Fragment>
@@ -164,10 +148,7 @@ const NodeView: FC<Props> = ({
         open={menuOpen}
         node={node}
         onClose={() => setMenuOpen(false)}
-        updateTree={updateTree}
         anchorEl={nodeRef.current as Element}
-        nextRow={nextRow}
-        incrementRow={incrementRow}
       />
     </div>
   )

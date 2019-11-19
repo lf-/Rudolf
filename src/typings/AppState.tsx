@@ -13,6 +13,7 @@ export interface SharedContext {
   nodeFormulas: NodeFormulaMap
   nodeRules: NodeRuleMap
   tree: FormulaNode
+  nextRow: number
 }
 
 export interface ContextWithDispatch {

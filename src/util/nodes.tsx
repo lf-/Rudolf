@@ -93,10 +93,10 @@ export const parsePremises = (
 
 export const updateNode = (
   root: FormulaNode,
-  targetNode: FormulaNode,
+  targetNodeId: string,
   updater: NodeUpdater
 ): FormulaNode => {
-  if (root === targetNode) {
+  if (root.id === targetNodeId) {
     return updater({ ...root })
   } else if (isClosingNode(root)) {
     return root
@@ -104,7 +104,7 @@ export const updateNode = (
     return {
       ...root,
       forest: root.forest.map((child: FormulaNode) =>
-        updateNode(child, targetNode, updater)
+        updateNode(child, targetNodeId, updater)
       ) as [FormulaNode] | [FormulaNode],
     }
   } else {
