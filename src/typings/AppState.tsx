@@ -1,4 +1,4 @@
-import { Formula, Rule, FormulaNode } from './Trees'
+import { FormulaNode } from './Trees'
 import { Dispatch } from 'react'
 
 export type Action =
@@ -9,12 +9,16 @@ export type Action =
   | { type: 'initializeNodes'; payload: string[] }
 
 export type NodeFormulaMap = {
-  [id: string]: [Formula, Rule]
+  [id: string]: string
+}
+export type NodeRuleMap = {
+  [id: string]: string
 }
 
 export interface SharedContext {
   selectedNodeId: string | null
   nodeFormulas: NodeFormulaMap
+  nodeRules: NodeRuleMap
   tree: FormulaNode
   dispatch: Dispatch<Action>
 }

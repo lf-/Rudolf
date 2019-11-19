@@ -20,7 +20,7 @@ import {
   FormulaNode,
 } from '../typings/Trees'
 import { NodeMenu } from './NodeMenu'
-import { initialState } from './initialState'
+import { Context } from './initialState'
 import {
   isClosingNode,
   isStackedNode,
@@ -47,8 +47,6 @@ const Spacers = ({ diff }: { diff: number }) => {
   return <>{spacers}</>
 }
 
-const context = React.createContext(initialState)
-
 const NodeView: FC<Props> = ({
   node,
   updateTree,
@@ -58,14 +56,9 @@ const NodeView: FC<Props> = ({
 }) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const nodeRef: Ref<HTMLDivElement> = useRef(null)
-  const { selectedNodeId, nodeFormulas } = useContext(context)
+  const { selectedNodeId, nodeFormulas, nodeRules } = useContext(Context)
 
   const handleLabelChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    // onChange({
-    //   node,
-    //   label: event.currentTarget.value,
-    //   rule: rule,
-    // })
     dispatch({
       type: 'updateFormula',
       payload: { nodeId: id, label: event.currentTarget.value },
@@ -78,11 +71,6 @@ const NodeView: FC<Props> = ({
   }
 
   const handleRuleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    // onChange({
-    //   node,
-    //   label: label,
-    //   rule: event.currentTarget.value,
-    // })
     dispatch({
       type: 'updateRule',
       payload: { nodeId: id, rule: event.currentTarget.value },
@@ -103,7 +91,8 @@ const NodeView: FC<Props> = ({
 
   const { id } = node
 
-  const [label, rule] = nodeFormulas[id] ?? ['', '']
+  const label = nodeFormulas[id] ?? ''
+  const rule = nodeRules[id] ?? ''
 
   return (
     <div

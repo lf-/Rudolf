@@ -11,13 +11,11 @@ import PremiseInput from './PremiseInput'
 import PremisesSelector from './PremisesSelector'
 import { reducer } from './reducer'
 
-const App: FC = (): JSX.Element => {
+const App: FC = () => {
   const [premises, setPremises] = useState(initialPremises)
   const [nextRow, setRow] = useState(initialPremises.split(',').length + 1)
-  const [context, dispatch] = useReducer(reducer, initialState)
-
-  const { tree } = context
-
+  const [appState, dispatch] = useReducer(reducer, initialState)
+  const { tree } = appState
   const incrementRow = () => {
     setRow(nextRow + 1)
   }
@@ -35,21 +33,21 @@ const App: FC = (): JSX.Element => {
 
   return (
     <main className="App">
-      <PremisesSelector onChange={handleSubmitPremises} />
-      <PremiseInput
-        premises={premises}
-        onSubmit={handleSubmitPremises}
-        setPremises={setPremises}
-      />
-      <span className="tree-buttons">
-        <IconButton className="undo-button" disabled={true}>
-          <Undo />
-        </IconButton>
-        <IconButton className="redo-button" disabled={true}>
-          <Redo />
-        </IconButton>
-      </span>
-      <Context.Provider value={{ ...context, dispatch }}>
+      <Context.Provider value={{ ...appState, dispatch }}>
+        <PremisesSelector onChange={handleSubmitPremises} />
+        <PremiseInput
+          premises={premises}
+          onSubmit={handleSubmitPremises}
+          setPremises={setPremises}
+        />
+        <span className="tree-buttons">
+          <IconButton className="undo-button" disabled={true}>
+            <Undo />
+          </IconButton>
+          <IconButton className="redo-button" disabled={true}>
+            <Redo />
+          </IconButton>
+        </span>
         <NodeView
           dispatch={dispatch}
           node={tree}

@@ -106,13 +106,15 @@ export const NodeMenu: FC<Props> = ({
   return (
     <Menu open={open} anchorEl={anchorEl} onClose={close}>
       {isFormulaNode(node) && (
-        <>
-          <MenuItem onClick={handleContinue}>Continue Branch</MenuItem>
-          <MenuItem onClick={handleSplit}>Split Branch</MenuItem>
-          <MenuItem onClick={toggleResolved}>
-            Mark as {node.resolved ? 'Un' : ''}Resolved
-          </MenuItem>
-        </>
+        <MenuItem onClick={handleContinue}>Continue Branch</MenuItem>
+      )}
+      {isFormulaNode(node) && (
+        <MenuItem onClick={handleSplit}>Split Branch</MenuItem>
+      )}
+      {isFormulaNode(node) && (
+        <MenuItem onClick={toggleResolved}>
+          Mark as {node.resolved ? 'Un' : ''}Resolved
+        </MenuItem>
       )}
       {isOpenLeaf(node) && (
         <MenuItem onClick={markContradiction}>

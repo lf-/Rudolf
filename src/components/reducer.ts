@@ -9,19 +9,19 @@ export const reducer = (state: SharedContext, action: Action) => {
     case 'initializeNodes':
       return produce(state, (draft) => {
         for (const id of action.payload) {
-          draft.nodeFormulas[id] = ['', '']
+          draft.nodeFormulas[id] = ''
         }
       })
     case 'updateRule': {
       return produce(state, (draft) => {
         const { nodeId, rule } = action.payload
-        draft.nodeFormulas[nodeId][1] = rule
+        draft.nodeRules[nodeId] = rule
       })
     }
     case 'updateFormula': {
       return produce(state, (draft) => {
         const { nodeId, label } = action.payload
-        draft.nodeFormulas[nodeId][0] = label
+        draft.nodeFormulas[nodeId] = label
       })
     }
     default:
