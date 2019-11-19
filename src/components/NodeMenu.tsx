@@ -1,16 +1,17 @@
 import { Menu, MenuItem } from '@material-ui/core'
-import React, { FC } from 'react'
+import React, { FC, useContext } from 'react'
 
-import { NodeUpdater, TreeNode, FormulaNode } from '../typings/TreeState'
+import { FormulaNode, NodeUpdater, TreeNode } from '../typings/Trees'
 import {
   appendChildren,
-  isOpenLeaf,
-  makeNode,
   isClosedLeaf,
   isFormulaNode,
+  isOpenLeaf,
   makeContradictionNode,
   makeFinishedNode,
+  makeNode,
 } from '../util/nodes'
+import { Context } from './initialState'
 
 type Props = {
   node: TreeNode
@@ -31,25 +32,43 @@ export const NodeMenu: FC<Props> = ({
   nextRow,
   incrementRow,
 }) => {
+  const { dispatch } = useContext(Context)
+
   const update = (updater: NodeUpdater) => {
     isFormulaNode(node) && updateTree(node, updater)
     close()
   }
 
-  const continueBranchUpdater: NodeUpdater = (node) =>
-    appendChildren(node, (id) => [makeNode({ id: `${id}0`, row: nextRow })])
+  const continueBranchUpdater: NodeUpdater = (node) => {
+    const [newNode, ids] = appendChildren(node, (parentId: string) => {
+      const id = `${parentId}0`
+      const newNode = makeNode({ id, row: nextRow })
+      return [[newNode], [id]]
+    })
+    dispatch({ type: 'initializeNodes', payload: ids })
+    return newNode
+  }
 
-  const splitBranchUpdater: NodeUpdater = (node) =>
-    appendChildren(node, (id) => [
-      makeNode({
-        id: `${id}0`,
-        row: nextRow,
-      }),
-      makeNode({
-        id: `${id}1`,
-        row: nextRow,
-      }),
-    ])
+  const splitBranchUpdater: NodeUpdater = (node) => {
+    const [newNode, ids] = appendChildren(node, (id: string) => {
+      const ids = [`${id}0`, `${id}1`]
+      return [
+        [
+          makeNode({
+            id: ids[0],
+            row: nextRow,
+          }),
+          makeNode({
+            id: ids[1],
+            row: nextRow,
+          }),
+        ],
+        ids,
+      ]
+    })
+    dispatch({ type: 'initializeNodes', payload: ids })
+    return newNode
+  }
 
   const handleSplit = (): void => {
     incrementRow()

@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@babel/core": "7.6.0",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.4.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.6.0",
     "@material-ui/core": "^4.5.0",
     "@material-ui/icons": "^4.2.1",
     "@svgr/webpack": "4.3.2",
@@ -39,6 +41,7 @@
     "fs-extra": "7.0.1",
     "html-webpack-plugin": "4.0.0-beta.5",
     "identity-obj-proxy": "3.0.0",
+    "immer": "^5.0.0",
     "immer-reducer": "^0.7.9",
     "is-wsl": "^1.1.0",
     "jest": "24.9.0",

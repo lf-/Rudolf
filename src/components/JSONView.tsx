@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { TextareaAutosize } from '@material-ui/core'
-import { FormulaNode } from '../typings/TreeState'
+import { FormulaNode } from '../typings/Trees'
 import { OutputFormulaNode } from '../typings/CarnapAPI'
 import {
   isContradictionLeaf,

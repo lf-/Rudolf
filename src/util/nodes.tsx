@@ -12,7 +12,7 @@ import {
   FormulaNode,
   ClosingNode,
   ContradictionLeafNode,
-} from '../typings/TreeState'
+} from '../typings/Trees'
 
 export const makeNode = ({
   label = '',
@@ -24,6 +24,7 @@ export const makeNode = ({
   id: string
   row: number
 }): FormulaNode => ({
+  nodeType: 'formulas',
   label,
   forest,
   resolved: false,
@@ -40,20 +41,31 @@ export const makeNode = ({
 export const appendChildren = (
   root: FormulaNode,
   createNodes: NodeGenerator
-): FormulaNode => {
-  if (isClosedLeaf(root)) {
-    return root
-  } else if (isOpenLeaf(root)) {
-    return { ...root, forest: createNodes(root.id, root.row) }
-  } else if (nodeHasChildren(root)) {
-    return {
-      ...root,
-      forest: root.forest.map<TreeNode>((child: FormulaNode) =>
-        appendChildren(child, createNodes)
-      ) as [FormulaNode] | [FormulaNode, FormulaNode],
-    }
+): [FormulaNode, string[]] => {
+  if (isOpenLeaf(root)) {
+    const [forest, ids] = createNodes(root.id, root.row)
+    return [{ ...root, forest }, ids]
+  } else if (isStackedNode(root)) {
+    const [child, ids] = appendChildren(root.forest[0], createNodes)
+    return [
+      {
+        ...root,
+        forest: [child],
+      },
+      ids,
+    ]
+  } else if (isBranchedNode(root)) {
+    const [leftChild, leftIds] = appendChildren(root.forest[0], createNodes)
+    const [rightChild, rightIds] = appendChildren(root.forest[1], createNodes)
+    return [
+      {
+        ...root,
+        forest: [leftChild, rightChild],
+      },
+      leftIds.concat(rightIds),
+    ]
   } else {
-    return root
+    return [root, []]
   }
 }
 
@@ -120,18 +132,19 @@ export const isClosedLeaf = (node: TreeNode): node is ClosedLeafNode =>
   isFormulaNode(node) && (isFinishedLeaf(node) || isContradictionLeaf(node))
 
 export const isFormulaNode = (node: TreeNode): node is FormulaNode => {
-  return typeof node === 'object' && 'forest' in node
+  return node.nodeType === 'formulas'
 }
 
 export const isFinishedNode = (
   node?: TreeNode | FinishedNode | ContradictionNode
-): node is FinishedNode => node?.rule === 'finished'
+): node is FinishedNode => node?.nodeType === 'finished'
+
 export const isContradictionNode = (
   node?: TreeNode | FinishedNode | ContradictionNode
-): node is ContradictionNode => node?.rule === 'contradiction'
+): node is ContradictionNode => node?.nodeType === 'contradiction'
 
-export const isClosingNode = (node: TreeNode): node is ClosingNode =>
-  isFinishedNode(node) || isContradictionNode(node)
+export const isClosingNode = (node?: TreeNode): node is ClosingNode =>
+  node?.nodeType === 'finished' || node?.nodeType === 'contradiction'
 
 export const isStackedNode = (node: FormulaNode): node is StackedNode =>
   node.forest.length === 1
@@ -149,5 +162,7 @@ export const nodeHasChildren = (
   )
 }
 
-export const makeContradictionNode = () => ({ rule: 'contradiction' } as const)
-export const makeFinishedNode = () => ({ rule: 'finished' } as const)
+export const makeContradictionNode = () =>
+  ({ rule: 'contradiction', nodeType: 'contradiction' } as const)
+export const makeFinishedNode = () =>
+  ({ rule: 'finished', nodeType: 'finished' } as const)

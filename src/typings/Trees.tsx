@@ -5,6 +5,7 @@
  * 3. extract formula values to map
  *  */
 export interface FormulaNode {
+  nodeType: 'formulas'
   label: string
   forest: [] | [TreeNode] | [TreeNode, TreeNode] | [ClosingNode]
   resolved: boolean
@@ -13,8 +14,11 @@ export interface FormulaNode {
   row: number
 }
 
-export type ContradictionNode = { rule: 'contradiction' }
-export type FinishingNode = { rule: 'finished' }
+export type ContradictionNode = {
+  nodeType: 'contradiction'
+  rule: 'contradiction'
+}
+export type FinishingNode = { nodeType: 'finished'; rule: 'finished' }
 export type ClosingNode = ContradictionNode | FinishingNode
 
 export type TreeNode = FormulaNode | FinishingNode | ContradictionNode
@@ -29,8 +33,14 @@ export type Rule = string
 // }
 
 export type NodeGenerator =
-  | ((parentId: string, parentRow: number) => [FormulaNode])
-  | ((parentId: string, parentRow: number) => [FormulaNode, FormulaNode])
+  | ((
+      parentId: string,
+      parentRow: number
+    ) => [[FormulaNode] | [FormulaNode, FormulaNode], string[]])
+  | ((
+      parentId: string,
+      parentRow: number
+    ) => [[FormulaNode, FormulaNode], string[]])
 
 export type NodeUpdater = (node: FormulaNode) => FormulaNode
 

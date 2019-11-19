@@ -1,38 +1,20 @@
-import React, { useState, useReducer, FC } from 'react'
+import { IconButton } from '@material-ui/core'
+import { Redo, Undo } from '@material-ui/icons'
+import React, { FC, useReducer, useState } from 'react'
 
-import { NodeUpdater, FormulaNode } from '../typings/TreeState'
+import { FormulaNode, NodeUpdater } from '../typings/Trees'
 import { parsePremises, updateNode } from '../util/nodes'
+import { Context, initialPremises, initialState } from './initialState'
+import { JSONView } from './JSONView'
 import NodeView from './NodeView'
 import PremiseInput from './PremiseInput'
 import PremisesSelector from './PremisesSelector'
-import { IconButton } from '@material-ui/core'
-import { Undo, Redo } from '@material-ui/icons'
-import { JSONView } from './JSONView'
-import { initialContext, initialPremises, Context } from './initialState'
-import { SharedContext } from '../typings/SharedContext'
-
-export type Action =
-  | { type: 'setTree'; payload: (tree: FormulaNode) => FormulaNode }
-  | { type: 'selectNode'; payload: string | null }
-  | { type: 'updateFormula'; payload: { nodeId: string; label: string } }
-  | { type: 'updateRule'; payload: { nodeId: string; rule: string } }
-
-const reducer = (state: SharedContext, action: Action) => {
-  switch (action.type) {
-    case 'setTree':
-      return { ...state, tree: action.payload(state.tree) }
-    case 'selectNode':
-      return { ...state, selectedNodeId: action.payload }
-    default:
-      console.error('unexpected action type', action)
-      return state
-  }
-}
+import { reducer } from './reducer'
 
 const App: FC = (): JSX.Element => {
   const [premises, setPremises] = useState(initialPremises)
   const [nextRow, setRow] = useState(initialPremises.split(',').length + 1)
-  const [context, dispatch] = useReducer(reducer, initialContext)
+  const [context, dispatch] = useReducer(reducer, initialState)
 
   const { tree } = context
 
@@ -67,7 +49,7 @@ const App: FC = (): JSX.Element => {
           <Redo />
         </IconButton>
       </span>
-      <Context.Provider value={{ ...context }}>
+      <Context.Provider value={{ ...context, dispatch }}>
         <NodeView
           dispatch={dispatch}
           node={tree}

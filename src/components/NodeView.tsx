@@ -18,16 +18,16 @@ import {
   TreeNode,
   ClosingNode,
   FormulaNode,
-} from '../typings/TreeState'
+} from '../typings/Trees'
 import { NodeMenu } from './NodeMenu'
-import { Action } from './App'
-import { initialContext } from './initialState'
+import { initialState } from './initialState'
 import {
   isClosingNode,
   isStackedNode,
   nodeHasChildren,
   isContradictionNode,
 } from '../util/nodes'
+import { Action } from '../typings/AppState'
 
 type Props = {
   node: TreeNode
@@ -47,7 +47,7 @@ const Spacers = ({ diff }: { diff: number }) => {
   return <>{spacers}</>
 }
 
-const context = React.createContext(initialContext)
+const context = React.createContext(initialState)
 
 const NodeView: FC<Props> = ({
   node,
@@ -103,7 +103,7 @@ const NodeView: FC<Props> = ({
 
   const { id } = node
 
-  const [label, rule] = nodeFormulas[id]
+  const [label, rule] = nodeFormulas[id] ?? ['', '']
 
   return (
     <div
