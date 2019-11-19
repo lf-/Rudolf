@@ -4,12 +4,12 @@ import React, { FC, useContext } from 'react'
 import { NodeUpdater, TreeNode } from '../typings/Trees'
 import {
   appendChildren,
-  isClosedLeaf,
   isFormulaNode,
   isOpenLeaf,
   makeContradictionNode,
   makeFinishedNode,
   makeNode,
+  isClosingNode,
 } from '../util/nodes'
 import { actions, CustomDispatch } from './reducer'
 import { Context } from './initialState'
@@ -86,13 +86,13 @@ export const NodeMenu: FC<Props> = ({
   const markContradiction = (): void =>
     update((node) => ({
       ...node,
-      forest: [makeContradictionNode()],
+      forest: [makeContradictionNode(node.id)],
     }))
 
   const markFinished = (): void =>
     update((node) => ({
       ...node,
-      forest: [makeFinishedNode()],
+      forest: [makeFinishedNode(node.id)],
     }))
   const reopenBranch = (): void =>
     update((node) => ({
@@ -121,7 +121,7 @@ export const NodeMenu: FC<Props> = ({
       {isOpenLeaf(node) && (
         <MenuItem onClick={markFinished}>Mark Branch Finished</MenuItem>
       )}
-      {isClosedLeaf(node) && (
+      {isClosingNode(node) && (
         <MenuItem onClick={reopenBranch}>Reopen Branch</MenuItem>
       )}
     </Menu>

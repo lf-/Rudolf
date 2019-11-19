@@ -9,7 +9,7 @@ import { JSONView } from './JSONView'
 import NodeView from './NodeView'
 import PremiseInput from './PremiseInput'
 import PremisesSelector from './PremisesSelector'
-import { reducer, actions } from './reducer'
+import { actions, reducer } from './reducer'
 
 const App: FC = () => {
   const [premises, setPremises] = useState(initialPremises)
@@ -24,7 +24,7 @@ const App: FC = () => {
     setPremises(rawInput)
     const premiseArray = premises.split(',')
     setTree(() => parsePremises(premiseArray, '', 1))
-    dispatch(actions.setRow(premiseArray.length))
+    dispatch(actions.setRow(premiseArray.length + 1))
   }
 
   return (

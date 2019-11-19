@@ -4,21 +4,42 @@
  * 2. make closed nodes work more like output
  * 3. extract formula values to map
  *  */
-export interface FormulaNode {
-  nodeType: 'formulas'
-  label: string
-  forest: [] | [TreeNode] | [TreeNode, TreeNode] | [ClosingNode]
-  resolved: boolean
-  rule: Exclude<string, 'finished' | 'contradiction'>
+interface NodeProps {
+  rule: string
   id: string
-  row: number
 }
 
-export type ContradictionNode = {
-  nodeType: 'contradiction'
-  rule: 'contradiction'
+export interface FormulaNode extends NodeProps {
+  label: string
+  resolved: boolean
+  row: number
+  rule: string
+  nodeType: 'formulas'
+  forest: [] | [ClosingNode] | [FormulaNode] | [FormulaNode, FormulaNode]
 }
-export type FinishingNode = { nodeType: 'finished'; rule: 'finished' }
+
+export interface ContradictionNode extends NodeProps {
+  nodeType: 'contradiction'
+  rule: 'X'
+  id: string
+}
+export interface FinishingNode extends NodeProps {
+  nodeType: 'finished'
+  rule: 'O'
+  id: string
+}
+
+export interface StackedNode extends FormulaNode {
+  forest: [FormulaNode]
+}
+export interface BranchedNode extends FormulaNode {
+  forest: [FormulaNode, FormulaNode]
+}
+
+export interface LeafNode extends FormulaNode {
+  forest: []
+}
+
 export type ClosingNode = ContradictionNode | FinishingNode
 
 export type TreeNode = FormulaNode | FinishingNode | ContradictionNode
@@ -44,14 +65,8 @@ export type NodeGenerator =
 
 export type NodeUpdater = (node: FormulaNode) => FormulaNode
 
-export type OpenLeafNode = FormulaNode & { forest: [] }
-
 export type ContradictionLeafNode = FormulaNode & { forest: ContradictionNode }
 
 export type FinishedLeafNode = FormulaNode & { forest: FinishingNode }
 
 export type ClosedLeafNode = ContradictionLeafNode | FinishedLeafNode
-
-export type BranchedNode = FormulaNode & { forest: [FormulaNode, FormulaNode] }
-
-export type StackedNode = FormulaNode & { forest: [FormulaNode] }

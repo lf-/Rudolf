@@ -15,12 +15,7 @@ import LineTo from 'react-lineto'
 import { TreeNode, ClosingNode } from '../typings/Trees'
 import { NodeMenu } from './NodeMenu'
 import { Context } from './initialState'
-import {
-  isClosingNode,
-  isStackedNode,
-  nodeHasChildren,
-  isContradictionNode,
-} from '../util/nodes'
+import { isClosingNode, isStackedNode, nodeHasChildren } from '../util/nodes'
 import { actions, CustomDispatch } from './reducer'
 
 type Props = {
@@ -58,16 +53,35 @@ const NodeView: FC<Props> = ({ node, dispatch }) => {
     dispatch(actions.updateRule(id, event.currentTarget.value))
   }
 
+  const renderMenu = () => (
+    <NodeMenu
+      dispatch={dispatch}
+      open={menuOpen}
+      node={node}
+      onClose={() => setMenuOpen(false)}
+      anchorEl={nodeRef.current as Element}
+    />
+  )
+
   const getClosedMarker = (node: ClosingNode) => {
-    return isContradictionNode(node) ? (
-      <div className="closed-branch-marker contradiction ">X</div>
-    ) : (
-      <div className="closed-branch-marker finished">O</div>
+    return (
+      <div
+        className={`closed-branch-marker-${node.rule}`}
+        onContextMenu={handleContextMenu}
+        ref={nodeRef}
+      >
+        {node.rule}
+      </div>
     )
   }
 
   if (isClosingNode(node)) {
-    return getClosedMarker(node)
+    return (
+      <Fragment>
+        {getClosedMarker(node)}
+        {renderMenu()}
+      </Fragment>
+    )
   }
 
   const { id } = node
@@ -143,13 +157,7 @@ const NodeView: FC<Props> = ({ node, dispatch }) => {
             })}
           </div>
         ))}
-      <NodeMenu
-        dispatch={dispatch}
-        open={menuOpen}
-        node={node}
-        onClose={() => setMenuOpen(false)}
-        anchorEl={nodeRef.current as Element}
-      />
+      {renderMenu()}
     </div>
   )
 }
