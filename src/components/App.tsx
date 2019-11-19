@@ -9,7 +9,7 @@ import { JSONView } from './JSONView'
 import NodeView from './NodeView'
 import PremiseInput from './PremiseInput'
 import PremisesSelector from './PremisesSelector'
-import { reducer } from './reducer'
+import { reducer, actions } from './reducer'
 
 const App: FC = () => {
   const [premises, setPremises] = useState(initialPremises)
@@ -21,7 +21,7 @@ const App: FC = () => {
   }
 
   const setTree = (updater: (tree: FormulaNode) => FormulaNode) => {
-    dispatch({ type: 'setTree', payload: updater })
+    dispatch(actions.setTree(updater))
   }
 
   const handleSubmitPremises = (rawInput: string) => {
@@ -33,7 +33,7 @@ const App: FC = () => {
 
   return (
     <main className="App">
-      <Context.Provider value={{ ...appState, dispatch }}>
+      <Context.Provider value={appState}>
         <PremisesSelector onChange={handleSubmitPremises} />
         <PremiseInput
           premises={premises}

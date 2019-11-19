@@ -8,7 +8,6 @@ import React, {
   useRef,
   useState,
   useContext,
-  Dispatch,
 } from 'react'
 import AutoSizeInput from 'react-input-autosize'
 import LineTo from 'react-lineto'
@@ -27,14 +26,14 @@ import {
   nodeHasChildren,
   isContradictionNode,
 } from '../util/nodes'
-import { Action } from '../typings/AppState'
+import { actions, CustomDispatch } from './reducer'
 
 type Props = {
   node: TreeNode
   updateTree: (node: FormulaNode, updater: NodeUpdater) => void
   nextRow: number
   incrementRow: () => void
-  dispatch: Dispatch<Action>
+  dispatch: CustomDispatch
 }
 
 const Spacers = ({ diff }: { diff: number }) => {
@@ -59,10 +58,7 @@ const NodeView: FC<Props> = ({
   const { selectedNodeId, nodeFormulas, nodeRules } = useContext(Context)
 
   const handleLabelChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    dispatch({
-      type: 'updateFormula',
-      payload: { nodeId: id, label: event.currentTarget.value },
-    })
+    dispatch(actions.updateFormula(id, event.currentTarget.value))
   }
 
   const handleContextMenu: MouseEventHandler = (event) => {
@@ -71,10 +67,7 @@ const NodeView: FC<Props> = ({
   }
 
   const handleRuleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    dispatch({
-      type: 'updateRule',
-      payload: { nodeId: id, rule: event.currentTarget.value },
-    })
+    dispatch(actions.updateRule(id, event.currentTarget.value))
   }
 
   const getClosedMarker = (node: ClosingNode) => {
@@ -167,6 +160,7 @@ const NodeView: FC<Props> = ({
           </div>
         ))}
       <NodeMenu
+        dispatch={dispatch}
         open={menuOpen}
         node={node}
         onClose={() => setMenuOpen(false)}

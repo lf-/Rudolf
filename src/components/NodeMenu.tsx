@@ -1,5 +1,5 @@
 import { Menu, MenuItem } from '@material-ui/core'
-import React, { FC, useContext } from 'react'
+import React, { FC } from 'react'
 
 import { FormulaNode, NodeUpdater, TreeNode } from '../typings/Trees'
 import {
@@ -11,7 +11,7 @@ import {
   makeFinishedNode,
   makeNode,
 } from '../util/nodes'
-import { Context } from './initialState'
+import { CustomDispatch, actions } from './reducer'
 
 type Props = {
   node: TreeNode
@@ -21,6 +21,7 @@ type Props = {
   anchorEl: Element
   nextRow: number
   incrementRow: () => void
+  dispatch: CustomDispatch
 }
 
 export const NodeMenu: FC<Props> = ({
@@ -31,9 +32,8 @@ export const NodeMenu: FC<Props> = ({
   onClose: close,
   nextRow,
   incrementRow,
+  dispatch,
 }) => {
-  const { dispatch } = useContext(Context)
-
   const update = (updater: NodeUpdater) => {
     isFormulaNode(node) && updateTree(node, updater)
     close()
@@ -45,7 +45,7 @@ export const NodeMenu: FC<Props> = ({
       const newNode = makeNode({ id, row: nextRow })
       return [[newNode], [id]]
     })
-    dispatch({ type: 'initializeNodes', payload: ids })
+    dispatch(actions.initializeNodes(ids))
     return newNode
   }
 
@@ -66,7 +66,7 @@ export const NodeMenu: FC<Props> = ({
         ids,
       ]
     })
-    dispatch({ type: 'initializeNodes', payload: ids })
+    dispatch(actions.initializeNodes(ids))
     return newNode
   }
 

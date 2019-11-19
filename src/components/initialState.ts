@@ -26,7 +26,6 @@ export const initialState: SharedContext = {
   nodeRules: mapTree(initialTree, 'rule'),
   selectedNodeId: null,
   tree: initialTree,
-  dispatch: () => {},
 }
 
 export const Context = createContext<SharedContext>(initialState)
