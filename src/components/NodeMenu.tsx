@@ -39,7 +39,7 @@ export const NodeMenu: FC<Props> = ({
   const continueBranchUpdater: NodeUpdater = (node) => {
     const [newNode, ids] = appendChildren(node, (parentId: string) => {
       const id = `${parentId}0`
-      const newNode = makeNode({ id, row: nextRow })
+      const newNode = { id, row: nextRow }
       return [[newNode], [id]]
     })
     dispatch(actions.initializeNodes(ids))

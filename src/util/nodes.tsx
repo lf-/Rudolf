@@ -9,35 +9,49 @@ import {
   LeafNode,
   StackedNode,
   TreeNode,
+  TreeForm,
 } from '../typings/Trees'
 
 export const makeNode = ({
-  label = '',
-  forest = [],
-  rule = '',
   id,
+  formulas,
   row,
-}: Partial<FormulaNode> & {
+  rule = '',
+}: Partial<Omit<FormulaNode, 'formulas'>> & {
   id: string
+  formulas: string[]
   row: number
 }): FormulaNode => ({
   nodeType: 'formulas',
-  label,
-  forest,
-  resolved: false,
+  forest: [],
   rule,
   id,
-  row,
+  formulas: makeTreeForms(formulas, row),
 })
 
-export const makeContradictionNode = (parentId: string): ContradictionNode =>
-  ({
-    rule: 'X',
-    nodeType: 'contradiction',
-    id: `${parentId}0`,
-  } as const)
-export const makeFinishedNode = (parentId: string): FinishedNode =>
-  ({ rule: 'O', nodeType: 'finished', id: `${parentId}0` } as const)
+const makeTreeForms = (formulas: string[], row: number): TreeForm[] => {
+  return formulas.map(
+    (value: string): TreeForm => {
+      const form: TreeForm = { value, row, resolved: false }
+      row += 1
+      return form
+    }
+  )
+}
+
+export const makeContradictionNode = (parentId: string): ContradictionNode => ({
+  rule: 'X',
+  nodeType: 'contradiction',
+  id: `${parentId}0`,
+  formulas: [],
+})
+
+export const makeFinishedNode = (parentId: string): FinishedNode => ({
+  rule: 'O',
+  nodeType: 'finished' as const,
+  id: `${parentId}0`,
+  formulas: [],
+})
 
 /**
  *
@@ -49,7 +63,7 @@ export const appendChildren = (
   createNodes: NodeGenerator
 ): [FormulaNode, string[]] => {
   if (isOpenLeaf(root)) {
-    const [forest, ids] = createNodes(root.id, root.row)
+    const [forest, ids] = createNodes(root.id, lastRow(root))
     return [{ ...root, forest }, ids]
   } else if (isStackedNode(root)) {
     const [child, ids] = appendChildren(root.forest[0], createNodes)
@@ -75,26 +89,8 @@ export const appendChildren = (
   }
 }
 
-/**
- *
- * @param formulas an array of of formulas.
- */
-export const parsePremises = (
-  formulas: string[],
-  parentId: string,
-  row: number
-): FormulaNode => {
-  const id = `${parentId}0`
-  return makeNode({
-    label: formulas[0],
-    rule: 'A',
-    forest:
-      formulas.length > 1
-        ? [parsePremises(formulas.slice(1), id, row + 1)]
-        : [],
-    id,
-    row,
-  })
+export const lastRow = (node: TreeNode) => {
+  return node.formulas[-1].row
 }
 
 export const updateNode = (

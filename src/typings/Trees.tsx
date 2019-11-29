@@ -7,12 +7,16 @@
 interface NodeProps {
   rule: string
   id: string
+  formulas: TreeForm[]
+}
+
+export interface TreeForm {
+  row: number
+  value: string
+  resolved: boolean
 }
 
 export interface FormulaNode extends NodeProps {
-  label: string
-  resolved: boolean
-  row: number
   rule: string
   nodeType: 'formulas'
   forest: [] | [ClosingNode] | [FormulaNode] | [FormulaNode, FormulaNode]

@@ -1,11 +1,9 @@
-import { SharedContext } from '../typings/AppState'
-import { parsePremises, isStackedNode } from '../util/nodes'
+import { AppState, NodeFormulaMap, NodeRuleMap } from '../typings/AppState'
+import { isStackedNode, makeNode } from '../util/nodes'
 import { createContext } from 'react'
 import { FormulaNode } from '../typings/Trees'
 
 export const initialPremises = 'P->Q,P,~Q'
-
-const initialTree = parsePremises(initialPremises.split(','), '', 1)
 
 const mapTree = <K extends keyof FormulaNode>(
   tree: FormulaNode,
@@ -21,12 +19,26 @@ const mapTree = <K extends keyof FormulaNode>(
   }
 }
 
-export const initialState: SharedContext = {
-  nodeFormulas: mapTree(initialTree, 'label'),
-  nodeRules: mapTree(initialTree, 'rule'),
+/**
+ *
+ * @param formulas an array of of formulas.
+ */
+export const parsePremises = (formulas: string) => {
+  const nodeFormulas: NodeFormulaMap = { '0': [] }
+  const nodeRules: NodeRuleMap = { '0': 'A' }
+  let nextRow = 1
+  for (const form of formulas.split(',')) {
+    nodeFormulas['0'].push({ value: form, row: nextRow, resolved: false })
+    nextRow += 1
+  }
+  const tree = makeNode({ id: '0' })
+  return { tree, nodeFormulas, nodeRules }
+}
+
+export const initialState: AppState = {
+  ...parsePremises(initialPremises),
   selectedNodeId: null,
-  tree: initialTree,
   nextRow: initialPremises.split(',').length + 1,
 }
 
-export const Context = createContext<SharedContext>(initialState)
+export const Context = createContext<AppState>(initialState)

@@ -40,7 +40,7 @@ const NodeView: FC<Props> = ({ node, dispatch }) => {
     Context
   )
 
-  const handleLabelChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+  const handleFormulaChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     dispatch(actions.updateFormula(id, event.currentTarget.value))
   }
 
@@ -86,7 +86,7 @@ const NodeView: FC<Props> = ({ node, dispatch }) => {
 
   const { id } = node
 
-  const label = nodeFormulas[id] ?? ''
+  const formulas = nodeFormulas[id] ?? ['']
   const rule = nodeRules[id] ?? ''
 
   return (
@@ -100,11 +100,11 @@ const NodeView: FC<Props> = ({ node, dispatch }) => {
         onContextMenu={handleContextMenu}
         ref={nodeRef}
       >
-        <span>{node.row} .</span>
+        ]<span>{node.row} .</span>
         <input
-          className="label"
-          onChange={handleLabelChange}
-          value={label}
+          className="formula"
+          onChange={handleFormulaChange}
+          value={formulas[0]}
           placeholder="formula"
         />
         (

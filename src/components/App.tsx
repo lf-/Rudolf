@@ -3,7 +3,6 @@ import { Redo, Undo } from '@material-ui/icons'
 import React, { FC, useReducer, useState } from 'react'
 
 import { FormulaNode } from '../typings/Trees'
-import { parsePremises } from '../util/nodes'
 import { Context, initialPremises, initialState } from './initialState'
 import { JSONView } from './JSONView'
 import NodeView from './NodeView'
@@ -23,7 +22,7 @@ const App: FC = () => {
   const handleSubmitPremises = (rawInput: string) => {
     setPremises(rawInput)
     const premiseArray = premises.split(',')
-    setTree(() => parsePremises(premiseArray, '', 1))
+    // setTree(() => parsePremises(premiseArray, '', 1))
     dispatch(actions.setRow(premiseArray.length + 1))
   }
 

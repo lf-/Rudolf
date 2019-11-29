@@ -5,12 +5,12 @@ import {
   ImmerReducer,
 } from 'immer-reducer'
 
-import { SharedContext } from '../typings/AppState'
+import { AppState } from '../typings/AppState'
 import { NodeUpdater } from '../typings/Trees'
 import { Dispatch } from 'react'
 import { updateNode } from '../util/nodes'
 
-export class RudolfReducer extends ImmerReducer<SharedContext> {
+export class RudolfReducer extends ImmerReducer<AppState> {
   updateTree(updater: NodeUpdater) {
     this.draftState.tree = updater(this.draftState.tree)
   }

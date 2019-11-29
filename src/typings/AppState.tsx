@@ -2,13 +2,13 @@ import { CustomDispatch } from '../components/reducer'
 import { FormulaNode } from './Trees'
 
 export type NodeFormulaMap = {
-  [id: string]: string
+  [id: string]: TreeForm[]
 }
 export type NodeRuleMap = {
   [id: string]: string
 }
 
-export interface SharedContext {
+export interface AppState {
   selectedNodeId: string | null
   nodeFormulas: NodeFormulaMap
   nodeRules: NodeRuleMap
