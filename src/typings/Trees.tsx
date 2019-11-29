@@ -7,7 +7,6 @@
 interface NodeProps {
   rule: string
   id: string
-  formulas: TreeForm[]
 }
 
 export interface TreeForm {

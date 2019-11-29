@@ -1,4 +1,3 @@
-import Check from '@material-ui/icons/Check'
 import React, {
   ChangeEventHandler,
   FC,
@@ -9,14 +8,14 @@ import React, {
   useState,
   useContext,
 } from 'react'
-import AutoSizeInput from 'react-input-autosize'
 import LineTo from 'react-lineto'
 
-import { TreeNode, ClosingNode } from '../typings/Trees'
+import { TreeNode, ClosingNode, TreeForm } from '../typings/Trees'
 import { NodeMenu } from './NodeMenu'
 import { Context } from './initialState'
 import { isClosingNode, isStackedNode, nodeHasChildren } from '../util/nodes'
 import { actions, CustomDispatch } from './reducer'
+import { FormulaView } from './FormulaView'
 
 type Props = {
   node: TreeNode
@@ -36,9 +35,14 @@ const Spacers = ({ diff }: { diff: number }) => {
 const NodeView: FC<Props> = ({ node, dispatch }) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const nodeRef: Ref<HTMLDivElement> = useRef(null)
-  const { selectedNodeId, nodeFormulas, nodeRules, nextRow } = useContext(
-    Context
-  )
+  const {
+    selectedNodeId,
+    nodeFormulas,
+    nodeRules,
+    nextRow,
+    firstRow,
+    lastRow,
+  } = useContext(Context)
 
   const handleFormulaChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     dispatch(actions.updateFormula(id, event.currentTarget.value))
@@ -93,35 +97,27 @@ const NodeView: FC<Props> = ({ node, dispatch }) => {
     <div
       className={`node-container ${selectedNodeId === id ? 'selected' : ''}`}
     >
-      <div
-        className={`node node-id=${id} ${
-          selectedNodeId === id ? 'selected' : ''
-        } `}
-        onContextMenu={handleContextMenu}
-        ref={nodeRef}
-      >
-        ]<span>{node.row} .</span>
-        <input
-          className="formula"
-          onChange={handleFormulaChange}
-          value={formulas[0]}
-          placeholder="formula"
+      {nodeFormulas[id].map((formula: TreeForm, idx: number) => (
+        <FormulaView
+          key={id + idx.toString()}
+          {...{
+            id,
+            selectedNodeId,
+            handleContextMenu,
+            nodeRef,
+            formula,
+            handleFormulaChange,
+            formulas,
+            handleRuleChange,
+            rule,
+          }}
         />
-        (
-        <AutoSizeInput
-          className="rule"
-          onChange={handleRuleChange}
-          value={rule}
-          placeholder="rule"
-        />
-        ){node.resolved ? <Check /> : ''}
-      </div>
-
+      ))}
       {!isClosingNode(node) &&
         nodeHasChildren(node) &&
         (isStackedNode(node) ? (
           <div className="children stack">
-            <Spacers diff={node.forest[0].row - node.row} />
+            <Spacers diff={firstRow(node.forest[0]) - lastRow(node)} />
             <NodeView
               {...{
                 node: node.forest[0],

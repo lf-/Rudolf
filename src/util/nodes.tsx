@@ -14,14 +14,8 @@ import {
 
 export const makeNode = ({
   id,
-  formulas,
-  row,
   rule = '',
-}: Partial<Omit<FormulaNode, 'formulas'>> & {
-  id: string
-  formulas: string[]
-  row: number
-}): FormulaNode => ({
+}: Partial<Omit<FormulaNode, 'formulas'>>): FormulaNode => ({
   nodeType: 'formulas',
   forest: [],
   rule,
@@ -43,14 +37,12 @@ export const makeContradictionNode = (parentId: string): ContradictionNode => ({
   rule: 'X',
   nodeType: 'contradiction',
   id: `${parentId}0`,
-  formulas: [],
 })
 
 export const makeFinishedNode = (parentId: string): FinishedNode => ({
   rule: 'O',
   nodeType: 'finished' as const,
   id: `${parentId}0`,
-  formulas: [],
 })
 
 /**

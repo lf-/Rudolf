@@ -25,7 +25,7 @@ export class RudolfReducer extends ImmerReducer<AppState> {
 
   initializeNodes(ids: string[]) {
     for (const id of ids) {
-      this.draftState.nodeFormulas[id] = ''
+      this.draftState.nodeFormulas[id] = {}
     }
   }
 

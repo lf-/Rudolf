@@ -34,11 +34,26 @@ export const parsePremises = (formulas: string) => {
   const tree = makeNode({ id: '0' })
   return { tree, nodeFormulas, nodeRules }
 }
+const { tree, nodeFormulas, nodeRules } = parsePremises(initialPremises)
+
+const lastRowFrom = (nodeFormulas: NodeFormulaMap) => (node: FormulaNode) => {
+  const formulas = nodeFormulas[node.id]
+  return formulas[formulas.length - 1].row
+}
+
+const firstRowFrom = (nodeFormulas: NodeFormulaMap) => (node: FormulaNode) => {
+  const formulas = nodeFormulas[node.id]
+  return formulas[0].row
+}
 
 export const initialState: AppState = {
-  ...parsePremises(initialPremises),
+  tree,
+  nodeFormulas,
+  nodeRules,
   selectedNodeId: null,
   nextRow: initialPremises.split(',').length + 1,
+  firstRow: firstRowFrom(nodeFormulas),
+  lastRow: lastRowFrom(nodeFormulas),
 }
 
 export const Context = createContext<AppState>(initialState)

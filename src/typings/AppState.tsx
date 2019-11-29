@@ -1,5 +1,5 @@
 import { CustomDispatch } from '../components/reducer'
-import { FormulaNode } from './Trees'
+import { FormulaNode, TreeForm } from './Trees'
 
 export type NodeFormulaMap = {
   [id: string]: TreeForm[]
@@ -14,6 +14,8 @@ export interface AppState {
   nodeRules: NodeRuleMap
   tree: FormulaNode
   nextRow: number
+  firstRow: (node: FormulaNode) => number
+  lastRow: (node: FormulaNode) => number
 }
 
 export interface ContextWithDispatch {
