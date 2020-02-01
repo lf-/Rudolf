@@ -21,7 +21,6 @@ export const makeNode = ({
 }): TreeNode => ({
   formulas,
   forest,
-  closed: false,
   rule,
   id,
 })
@@ -38,7 +37,7 @@ export const appendChildren = (
   if (typeof root.forest === 'string') {
     return root
   } else if (root.forest.length === 0) {
-    return root.closed
+    return isClosedLeaf(root) // TODO: Special Handling for FinishedNodes?
       ? root
       : { ...root, forest: createNodes(root.id, lastRow(root) + 1) } // TODO
   } else {
@@ -62,7 +61,8 @@ export const destructivelyAppendChildren = (
 ): void => {
   if (typeof root.forest === 'string') {
   } else if (root.forest.length === 0) {
-    if (!root.closed) {
+    if (!isClosedLeaf(root)) {
+      // TODO: Special Handling for FinishedNodes?
       root.forest = createNodes(root.id, -1)
     }
   } else {

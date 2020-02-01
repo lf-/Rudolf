@@ -18,6 +18,8 @@ export type NodeMutater = (node: TreeNode) => void
 
 export type OpenLeafNode = TreeNode & { forest: [] }
 
-export type ClosedLeafNode = TreeNode & { forest: 'contradiction' }
+type ContradictionNode = 'contradiction'
+export type ClosedLeafNode = TreeNode & { forest: ContradictionNode }
 
-export type FinishedLeafNode = TreeNode & { forest: 'finished' }
+type FinishedNode = 'finished'
+export type FinishedLeafNode = TreeNode & { forest: FinishedNode }
