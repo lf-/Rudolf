@@ -18,12 +18,12 @@ export type OutputNode = FormulaNode | ContradictionNode | FinishedNode
 
 export type FormulaNode = {
   nodeType: 'formulas'
-  forest: OutputNode[] | [FinishedNode] | [ContradictionNode]
+  forest: FormulaNode[] | [FinishedNode] | [ContradictionNode]
   formulas: TreeForm[]
   rule: string
 }
 
-// We mark a branch as closed by adding a
+// We mark a branch as closed by adding a special node
 
 export type FinishedNode = {
   nodeType: 'finished'

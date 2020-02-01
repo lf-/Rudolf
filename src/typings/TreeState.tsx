@@ -7,7 +7,6 @@ import { TreeForm } from './CarnapAPI'
 export interface TreeNode {
   formulas: TreeForm[]
   forest: TreeNode[] | 'finished' | 'contradiction'
-  closed: boolean
   rule: string
   id: string
 }
