@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+ *  <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>ProofJS Demos</title>
+        <link rel="stylesheet" href="./proof.css" type="text/css" media="screen" title="no title" charset="utf-8">
+        <link rel="stylesheet" href="./demo.css" type="text/css" media="screen" title="no title" charset="utf-8">
+        <script src="./proof.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    </head>
+    <body>
+        <div>
+            <p>Press <code>Enter</code> to create a new sibling node.</p>
+            <p>Press <code>Ctrl-Enter</code> to create a new parent node.</p>
+            <p>Press <code>Ctrl-Shift-Enter</code> to create a new child node.</p>
+            <p>Cycle nodes with <code>Tab</code> and <code>Shift-Tab</code>.</p>
+            <p>Undo and Redo changes with <code>Ctrl-Z</code> and <code>Ctrl-Shift-Z</code>.</p>
+            <p>Delete subtrees with <code>Ctrl-Backspace</code>.</p>
+            <p>Cut, Copy, and Paste subtrees with <code>Shift-Ctrl-X</code>, <code>Shift-Ctrl-C</code> and <code>Shift-Ctrl-V</code>
+            <p>
+                Mouse over rule labels for annotations, including errors and calculated sequents for the Gentzen-Prawitz tree.
+            </p>
+        </div>
+        <div style="margin-bottom:10px; display:flex;flex-wrap:wrap">
+            <div id="sandbox1" class="sandbox">
+                <div class="json-container"> 
+                    view JSON
+                    <div id="json1" class="json"> </div>
+                </div>
+            </div>
+            <div id="sandbox2" class="sandbox">
+                <div class="json-container"> 
+                    view JSON
+                    <div id="json2" class="json"> </div>
+                </div>
+            </div>
+            <div id="sandbox3" class="sandbox"> 
+                <div class="json-container"> 
+                    view JSON
+                    <div id="json3" class="json"> </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script id="alljs" src="./all.js"></script>
+    <script defer>
+
+var sandbox1 = document.getElementById('sandbox1');
+var sandbox2 = document.getElementById('sandbox2');
+var sandbox3 = document.getElementById('sandbox3');
+
+var jsonDisplay1 = document.getElementById('json1');
+var jsonDisplay2 = document.getElementById('json2');
+var jsonDisplay3 = document.getElementById('json3');
+
+var root1 = new DeductionRoot(
+{
+  "label": "(P->Q)->((R->P)->(R->Q))",
+  "rule": "->I(1)",
+  "forest": [
+    {
+      "label": "(R->P)->(R->Q)",
+      "rule": "->I(2)",
+      "forest": [
+        {
+          "label": "R->Q",
+          "rule": "->I(3)",
+          "forest": [
+            {
+              "label": "Q",
+              "rule": "->E",
+              "forest": [
+                {
+                  "label": "P->Q",
+                  "rule": "(1)",
+                  "forest": [
+                    {
+                      "label": "",
+                      "rule": "",
+                      "forest": []
+                    }
+                  ]
+                },
+                {
+                  "label": "P",
+                  "rule": "->E",
+                  "forest": [
+                    {
+                      "label": "R->P",
+                      "rule": "(2)",
+                      "forest": [
+                        {
+                          "label": "",
+                          "rule": "",
+                          "forest": []
+                        }
+                      ]
+                    },
+                    {
+                      "label": "R",
+                      "rule": "(3)",
+                      "forest": [
+                        {
+                          "label": "",
+                          "rule": "",
+                          "forest": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+);
+
+var root2 = new DeductionRoot(
+{
+  "label": "P,P->Q:|-:Q",
+  "rule": "L->",
+  "ident": 11,
+  "forest": [
+    {
+      "label": "P,Q:|-:Q",
+      "rule": "Cut",
+      "ident": 12,
+      "forest": [
+        {
+          "label": "P,Q,R:|-:Q",
+          "rule": "Rep",
+          "ident": 13,
+          "forest": [
+            {
+              "label": "P,R,Q:|-:Q",
+              "rule": "Ax",
+              "ident": 58,
+              "forest": [
+                {
+                  "label": "",
+                  "rule": "",
+                  "ident": 59,
+                  "forest": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "P,Q:|-:Q,R",
+          "rule": "Ax",
+          "ident": 14,
+          "forest": [
+            {
+              "label": "",
+              "rule": "",
+              "ident": 57,
+              "forest": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "P:|-:Q,P",
+      "rule": "Ax",
+      "ident": 15,
+      "forest": [
+        {
+          "label": "",
+          "rule": "",
+          "ident": 16,
+          "forest": []
+        }
+      ]
+    }
+  ]
+}
+);
+
+var root3 = new DeductionRoot(
+{
+  "label": "AxEy(F(x)/\\G(y)):|-:EyAx(F(x)/\\G(y))",
+  "rule": "RE",
+  "forest": [
+    {
+      "label": "AxEy(F(x)/\\G(y)) :|-: Ax(F(x)/\\G(b)), EyAx(F(x)/\\G(y))",
+      "rule": "LA",
+      "forest": [
+        {
+          "label": "AxEy(F(x)/\\G(y)), Ey(F(a)/\\G(y)) :|-: Ax(F(x)/\\G(b)), EyAx(F(x)/\\G(y))",
+          "rule": "LE",
+          "forest": [
+            {
+              "label": "AxEy(F(x)/\\G(y)), F(a)/\\G(c) :|-: Ax(F(x)/\\G(b)), EyAx(F(x)/\\G(y))",
+              "rule": "L&2",
+              "forest": [
+                {
+                  "label": "G(c), AxEy(F(x)/\\G(y)) :|-: Ax(F(x)/\\G(b)), EyAx(F(x)/\\G(y))",
+                  "rule": "RA",
+                  "forest": [
+                    {
+                      "label": "G(c), AxEy(F(x)/\\G(y)) :|-: F(d)/\\G(b), EyAx(F(x)/\\G(y))",
+                      "rule": "R&",
+                      "forest": [
+                        {
+                          "label": "G(c), AxEy(F(x)/\\G(y)) :|-: F(d), EyAx(F(x)/\\G(y))",
+                          "rule": "LA",
+                          "forest": [
+                            {
+                              "label": "G(c), Ey(F(d)/\\G(y)) :|-: F(d), EyAx(F(x)/\\G(y))",
+                              "rule": "LE",
+                              "forest": [
+                                {
+                                  "label": "G(c), F(d)/\\G(e) :|-: F(d), EyAx(F(x)/\\G(y))",
+                                  "rule": "L&1",
+                                  "forest": [
+                                    {
+                                      "label": "G(c), F(d) :|-: F(d), EyAx(F(x)/\\G(y))",
+                                      "rule": "Ax",
+                                      "forest": [
+                                        {
+                                          "label": "",
+                                          "rule": "",
+                                          "forest": []
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "label": "AxEy(F(x)/\\G(y)), G(c):|-:EyAx(F(x)/\\G(y)), G(b)",
+                          "rule": "RE",
+                          "forest": [
+                            {
+                              "label": "AxEy(F(x)/\\G(y)), G(c):|-:Ax(F(x)/\\G(c)), G(b)",
+                              "rule": "RA",
+                              "forest": [
+                                {
+                                  "label": "G(c), AxEy(F(x)/\\G(y)), :|-:F(a)/\\G(c), G(b)",
+                                  "rule": "LA",
+                                  "forest": [
+                                    {
+                                      "label": "G(c), Ey(F(a)/\\G(y)), :|-:F(a)/\\G(c), G(b)",
+                                      "rule": "LE",
+                                      "forest": [
+                                        {
+                                          "label": "G(c), F(a)/\\G(d) :|-:F(a)/\\G(c), G(b)",
+                                          "rule": "L&1",
+                                          "forest": [
+                                            {
+                                              "label": "G(c), F(a) :|-:F(a)/\\G(c), G(b)",
+                                              "rule": "R&",
+                                              "forest": [
+                                                {
+                                                  "label": "F(a),G(c) :|-:G(c), G(b)",
+                                                  "rule": "Ax",
+                                                  "forest": [
+                                                    {
+                                                      "label": "",
+                                                      "rule": "",
+                                                      "forest": []
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "label": "G(c), F(a) :|-:F(a), G(b)",
+                                                  "rule": "Ax",
+                                                  "forest": [
+                                                    {
+                                                      "label": "",
+                                                      "rule": "",
+                                                      "forest": []
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+})
+
+jsonDisplay1.innerHTML = "<pre contenteditable='true'>" + JSON.stringify(root1,null,2) + "</pre>";
+jsonDisplay2.innerHTML = "<pre contenteditable='true'>" + JSON.stringify(root2,null,2) + "</pre>";
+jsonDisplay3.innerHTML = "<pre contenteditable='true'>" + JSON.stringify(root3,null,2) + "</pre>";
+
+root1.on('changed', function () {
+    jsonDisplay1.lastChild.innerHTML = "<pre>" + JSON.stringify(root1,null,2) + "</pre>";
+});
+
+root2.on('changed', function () {
+    jsonDisplay2.lastChild.innerHTML = "<pre>" + JSON.stringify(root2,null,2) + "</pre>";
+});
+
+root3.on('changed', function () {
+    jsonDisplay2.lastChild.innerHTML = "<pre>" + JSON.stringify(root2,null,2) + "</pre>";
+});
+
+jsonDisplay1.addEventListener('keyup', function() {
+    root1.replace(JSON.parse(this.lastChild.innerText))
+});
+
+
+jsonDisplay2.addEventListener('keyup', function() {
+    root2.replace(JSON.parse(this.lastChild.innerText))
+});
+
+jsonDisplay3.addEventListener('keyup', function() {
+    root3.replace(JSON.parse(this.lastChild.innerText))
+});
+
+root1.renderOn(sandbox1);
+root2.renderOn(sandbox2);
+root3.renderOn(sandbox3);
+
+//a proof can be decorated with a tree of annotations
+root1.decorate({
+    class: "highlighted",
+    info: "an inference the assumption (1)",
+    forest: []
+});
+
+function trimProof (n,obj) {
+if (n == 0) { return ({label: obj.label, rule: obj.rule, forest: []})}
+else { return ({label: obj.label, rule: obj.rule, forest: obj.forest.map((t)=>{return trimProof(n-1,t)})})}}
+
+function trimInfo (n,obj) {
+if (n == 0) { return ({info: obj.info, class: obj.class, forest: []})}
+else { return ({info: obj.info, class: obj.class, forest: obj.forest.map((t)=>{return trimInfo(n-1,t)})})}}
+
+function slowLoad () {
+    setTimeout(function () {
+        try {
+                Carnap.checkProofTreeInfo(root1,(t)=>{root1.decorate(t)})
+                Carnap.checkPropSequent(root2,(t)=>{root2.decorate(t)});
+                Carnap.checkFOLSequent(root3,(t)=>{root3.decorate(t)});
+            }
+        catch (e) {slowLoad()}
+    },100)
+};
+    
+slowLoad()
+
+var updateTimeout
+
+
+root1.on("changed",(thenode)=>{
+  clearTimeout(updateTimeout)
+  updateTimeout = setTimeout(function() {
+          Carnap.checkProofTreeInfo(root1,(t)=>{root1.decorate(t)})
+      },500)
+});
+
+root2.on("changed",(thenode)=>{
+  clearTimeout(updateTimeout)
+  updateTimeout = setTimeout(function() {
+          if (thenode.label == "") {thenode.info = ""; thenode.class = "";}
+          if (thenode.parentNode) thenode = thenode.parentNode
+          Carnap.checkPropSequent(trimProof(2,thenode),(t)=>{thenode.decorate(trimInfo(1,t))})
+      },500)
+});
+
+root3.on("changed",(thenode)=>{
+  clearTimeout(updateTimeout)
+  updateTimeout = setTimeout(function() {
+          if (thenode.label == "") {thenode.info = ""; thenode.class = "";}
+          if (thenode.parentNode) thenode = thenode.parentNode
+          Carnap.checkFOLSequent(trimProof(2,thenode),(t)=>{thenode.decorate(trimInfo(1,t))})
+      },500)
+});
+
+    </script>
+</html>
