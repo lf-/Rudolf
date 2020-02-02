@@ -11,11 +11,13 @@ import {
   destructivelyAppendChildren,
   makeNode,
   makeFormulas,
+  makeContradictionNode,
+  makeFinishedNode,
 } from './util/nodes'
-import { TreeNode } from './typings/TreeState'
+import { FormulaNode } from './typings/CarnapAPI'
 
 export type RudolfStore = {
-  tree: TreeNode
+  tree: FormulaNode
   nextRow: number
 }
 
@@ -77,19 +79,19 @@ export class RudolfReducer extends ImmerReducer<RudolfStore> {
   }
 
   markContradiction(nodeId: string) {
-    mutateNode(this.draftState.tree, nodeId, (node) => {
-      node.forest = 'contradiction'
+    mutateNode(this.draftState.tree, nodeId, (node: FormulaNode): void => {
+      node.forest = [makeContradictionNode(node.id)]
     })
   }
 
   markFinished(nodeId: string) {
-    mutateNode(this.draftState.tree, nodeId, (node) => {
-      node.forest = 'finished'
+    mutateNode(this.draftState.tree, nodeId, (node: FormulaNode): void => {
+      node.forest = [makeFinishedNode(node.id)]
     })
   }
 
   reopenBranch(nodeId: string) {
-    mutateNode(this.draftState.tree, nodeId, (node) => {
+    mutateNode(this.draftState.tree, nodeId, (node: FormulaNode) => {
       node.forest = []
     })
   }

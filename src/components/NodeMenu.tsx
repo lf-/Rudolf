@@ -12,7 +12,7 @@ import {
 } from '../RudolfReducer'
 import { TreeForm } from '../typings/CarnapAPI'
 import { TreeNode } from '../typings/TreeState'
-import { isOpenLeaf, isClosedLeaf } from '../util/nodes'
+import { isOpenLeaf } from '../util/nodes'
 
 type Props = {
   onClose: () => void
@@ -95,7 +95,7 @@ export const NodeMenu: FC<Props> = ({
           Mark Branch Finished
         </MenuItem>
       )}
-      {isClosedLeaf(node) && (
+      {node.nodeType === 'contradiction' && (
         <MenuItem
           onClick={() => {
             dispatch(reopenBranch(node.id))

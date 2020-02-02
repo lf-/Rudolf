@@ -1,3 +1,5 @@
+import { TreeNodeProps, TreeNode } from './TreeState'
+
 export interface FeedbackMessage {
   status: 'correct' | 'incorrect' | 'parsing'
   message: string
@@ -16,22 +18,22 @@ export interface TreeForm {
 
 export type OutputNode = FormulaNode | ContradictionNode | FinishedNode
 
-export type FormulaNode = {
+export interface FormulaNode extends TreeNodeProps {
   nodeType: 'formulas'
-  forest: FormulaNode[] | [FinishedNode] | [ContradictionNode]
+  forest: TreeNode[]
   formulas: TreeForm[]
   rule: string
 }
 
 // We mark a branch as closed by adding a special node
 
-export type FinishedNode = {
+export interface FinishedNode extends TreeNodeProps {
   nodeType: 'finished'
   formulas: []
   rule: string // ['O', ...number[]] // List of resolved rows? on the branch
 }
 
-export type ContradictionNode = {
+export interface ContradictionNode extends TreeNodeProps {
   nodeType: 'contradiction'
   formulas: []
   rule: string // ['X', number, number] e.g X
