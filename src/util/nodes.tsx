@@ -4,7 +4,7 @@ import {
   FormulaNode,
   ContradictionNode,
   FinishedNode,
-} from '../typings/CarnapAPI'
+} from '../typings/TreeState'
 import { lastEl } from './helpers'
 
 export const makeNode = ({

@@ -14,7 +14,7 @@ import {
   makeFinishedNode,
   getNode,
 } from './util/nodes'
-import { FormulaNode } from './typings/CarnapAPI'
+import { FormulaNode } from './typings/TreeState'
 
 export type RudolfStore = {
   tree: FormulaNode

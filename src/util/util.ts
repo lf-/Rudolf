@@ -1,4 +1,4 @@
-import { FormulaNode } from '../typings/CarnapAPI'
+import { FormulaNode } from '../typings/TreeState'
 
 export const isEmptyArray = <T>(
   maybeArray: Array<T> | string

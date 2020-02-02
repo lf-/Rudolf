@@ -10,7 +10,7 @@ import {
   markFinished,
   reopenBranch,
 } from '../RudolfReducer'
-import { TreeForm } from '../typings/CarnapAPI'
+import { TreeForm } from '../typings/TreeState'
 import { TreeNode } from '../typings/TreeState'
 import { isOpenLeaf } from '../util/nodes'
 

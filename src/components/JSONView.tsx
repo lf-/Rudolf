@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { TextareaAutosize } from '@material-ui/core'
-import { FormulaNode } from '../typings/CarnapAPI'
+import { FormulaNode } from '../typings/TreeState'
 
 export const JSONView: FC<{ tree: FormulaNode }> = ({ tree }) => (
   <TextareaAutosize
