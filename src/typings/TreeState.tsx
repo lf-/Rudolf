@@ -22,9 +22,6 @@ export type NodeGenerator = (
   parentRow: number
 ) => FormulaNode[]
 
-export type NodeUpdater<T extends TreeNode> = (node: T) => T
-export type NodeMutater<T extends TreeNode> = (node: T) => void
-
 export type OpenLeafNode = FormulaNode & { forest: [] }
 
 export type ClosedLeafNode = FormulaNode & { forest: ContradictionNode }

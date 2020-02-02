@@ -1,9 +1,4 @@
-import {
-  OpenLeafNode,
-  NodeGenerator,
-  NodeMutater,
-  TreeNode,
-} from '../typings/TreeState'
+import { OpenLeafNode, NodeGenerator, TreeNode } from '../typings/TreeState'
 import {
   TreeForm,
   FormulaNode,
@@ -117,20 +112,6 @@ const makeTreeForm = (value = '', row: number): TreeForm => ({
   row,
   resolved: false,
 })
-
-export const mutateNode = <NodeType extends TreeNode>(
-  root: TreeNode,
-  targetNodeId: string,
-  mutater: NodeMutater<NodeType>
-): void => {
-  if (root.id === targetNodeId) {
-    mutater(root as NodeType)
-  } else if (root.nodeType !== 'formulas') {
-    return
-  } else {
-    root.forest.forEach((child) => mutateNode(child, targetNodeId, mutater))
-  }
-}
 
 export const isOpenLeaf = (node: TreeNode | null): node is OpenLeafNode =>
   node != null && node.nodeType === 'formulas' && node.forest.length === 0

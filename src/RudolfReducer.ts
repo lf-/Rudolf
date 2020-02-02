@@ -6,7 +6,6 @@ import {
 } from 'immer-reducer'
 import { Dispatch } from 'react'
 import {
-  mutateNode,
   parsePremises,
   destructivelyAppendChildren,
   makeNode,
@@ -76,21 +75,18 @@ export class RudolfReducer extends ImmerReducer<RudolfStore> {
   }
 
   markContradiction(nodeId: string) {
-    mutateNode(this.draftState.tree, nodeId, (node: FormulaNode): void => {
-      node.forest = [makeContradictionNode(node.id)]
-    })
+    const draftNode = getNode(this.draftState.tree, nodeId) as FormulaNode
+    draftNode.forest = [makeContradictionNode(draftNode.id)]
   }
 
   markFinished(nodeId: string) {
-    mutateNode(this.draftState.tree, nodeId, (node: FormulaNode): void => {
-      node.forest = [makeFinishedNode(node.id)]
-    })
+    const draftNode = getNode(this.draftState.tree, nodeId) as FormulaNode
+    draftNode.forest = [makeFinishedNode(draftNode.id)]
   }
 
   reopenBranch(nodeId: string) {
-    mutateNode(this.draftState.tree, nodeId, (node: FormulaNode) => {
-      node.forest = []
-    })
+    const draftNode = getNode(this.draftState.tree, nodeId) as FormulaNode
+    draftNode.forest = []
   }
 }
 
