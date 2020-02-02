@@ -24,6 +24,19 @@ type Props = {
   formula: TreeForm
 }
 
+/**
+ * @TODO make context menu work for each of
+ * - Formula Node:
+ *   - branch commands
+ *
+ * - Contradiction/Finished node:
+ *   - Reopen.
+ * - Formula:
+ *   - branch commands
+ *   - (un)resolve
+ *   - close branch.
+ */
+
 export const NodeMenu: FC<Props> = ({
   open,
   dispatch,
