@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 import {
   CustomDispatch,
-  resolveFormula,
+  toggleResolved,
   continueBranch,
   splitBranch,
   markContradiction,
@@ -69,7 +69,7 @@ export const NodeMenu: FC<Props> = ({
       </MenuItem>
       <MenuItem
         onClick={() => {
-          dispatch(resolveFormula(node.id, index))
+          dispatch(toggleResolved(node.id, index))
           close()
         }}
       >

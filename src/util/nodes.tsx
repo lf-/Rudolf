@@ -139,10 +139,34 @@ export const lastRow = (node: FormulaNode) => lastEl(node.formulas).row
 
 export const firstRow = (node: FormulaNode) => node.formulas[0].row
 
-export const makeFormulas = (n: number, nextRow: number): TreeForm[] => {
+export const makeEmptyFormulas = (n: number, nextRow: number): TreeForm[] => {
   const arr = []
   while (n-- > 0) {
     arr.push({ value: '', row: nextRow++, resolved: false })
   }
   return arr
+}
+
+export const convertIdToPath = (id: string): (0 | 1)[] =>
+  id
+    .split('')
+    .splice(1)
+    .map((char: string) => {
+      if (char === '0' || char === '1') {
+        return Number(char) as 0 | 1
+      } else {
+        throw new Error(`invalid character in node id: ${char}`)
+      }
+    })
+
+export const getNode = (root: FormulaNode, id: string): TreeNode => {
+  const nodePath: (0 | 1)[] = convertIdToPath(id)
+  let currentNode: TreeNode = root
+  for (const idx of nodePath) {
+    if (currentNode.nodeType !== 'formulas') {
+      throw new Error('Failed to get node path')
+    }
+    currentNode = currentNode.forest[idx]
+  }
+  return currentNode
 }

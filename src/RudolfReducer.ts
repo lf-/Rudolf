@@ -10,9 +10,10 @@ import {
   parsePremises,
   destructivelyAppendChildren,
   makeNode,
-  makeFormulas,
+  makeEmptyFormulas,
   makeContradictionNode,
   makeFinishedNode,
+  getNode,
 } from './util/nodes'
 import { FormulaNode } from './typings/CarnapAPI'
 
@@ -23,21 +24,18 @@ export type RudolfStore = {
 
 export class RudolfReducer extends ImmerReducer<RudolfStore> {
   updateFormula(nodeId: string, formulaIndex: number, newValue: string) {
-    mutateNode(this.draftState.tree, nodeId, (draftNode) => {
-      draftNode.formulas[formulaIndex].value = newValue
-    })
+    const draftNode = getNode(this.draftState.tree, nodeId)
+    draftNode.formulas[formulaIndex].value = newValue
   }
 
   updateRule(nodeId: string, newValue: string) {
-    mutateNode(this.draftState.tree, nodeId, (draftNode) => {
-      draftNode.rule = newValue
-    })
+    const draftNode = getNode(this.draftState.tree, nodeId)
+    draftNode.rule = newValue
   }
 
-  resolveFormula(nodeId: string, index: number) {
-    mutateNode(this.draftState.tree, nodeId, (node) => {
-      node.formulas[index].resolved = !node.formulas[index].resolved
-    })
+  toggleResolved(nodeId: string, index: number) {
+    const draftNode = getNode(this.draftState.tree, nodeId)
+    draftNode.formulas[index].resolved = !draftNode.formulas[index].resolved
   }
 
   createTree(premiseArray: string[]) {
@@ -46,35 +44,34 @@ export class RudolfReducer extends ImmerReducer<RudolfStore> {
   }
 
   continueBranch(nodeId: string, formulaCount: number) {
-    mutateNode(this.draftState.tree, nodeId, (node) =>
-      destructivelyAppendChildren(node, (id) => [
-        makeNode({
-          id: `${id}0`,
-          row: this.draftState.nextRow,
-          formulas: makeFormulas(formulaCount, this.draftState.nextRow),
-        }),
-      ])
-    )
+    const draftNode = getNode(this.draftState.tree, nodeId)
+    destructivelyAppendChildren(draftNode, (id) => [
+      makeNode({
+        id: `${id}0`,
+        row: this.draftState.nextRow,
+        formulas: makeEmptyFormulas(formulaCount, this.draftState.nextRow),
+      }),
+    ])
+
     this.draftState.nextRow += formulaCount
   }
 
   splitBranch(nodeId: string, formulaCount: number) {
-    mutateNode(this.draftState.tree, nodeId, (node) =>
-      destructivelyAppendChildren(node, (id) => {
-        return [
-          makeNode({
-            id: `${id}0`,
-            row: this.draftState.nextRow,
-            formulas: makeFormulas(formulaCount, this.draftState.nextRow),
-          }),
-          makeNode({
-            id: `${id}1`,
-            row: this.draftState.nextRow,
-            formulas: makeFormulas(formulaCount, this.draftState.nextRow),
-          }),
-        ]
-      })
-    )
+    const draftNode = getNode(this.draftState.tree, nodeId)
+    destructivelyAppendChildren(draftNode, (id) => {
+      return [
+        makeNode({
+          id: `${id}0`,
+          row: this.draftState.nextRow,
+          formulas: makeEmptyFormulas(formulaCount, this.draftState.nextRow),
+        }),
+        makeNode({
+          id: `${id}1`,
+          row: this.draftState.nextRow,
+          formulas: makeEmptyFormulas(formulaCount, this.draftState.nextRow),
+        }),
+      ]
+    })
     this.draftState.nextRow += formulaCount
   }
 
@@ -108,7 +105,7 @@ export const initialState: RudolfStore = {
 export const rudolfReducer = createReducerFunction(RudolfReducer)
 export const {
   createTree,
-  resolveFormula,
+  toggleResolved,
   updateFormula,
   updateRule,
   continueBranch,
