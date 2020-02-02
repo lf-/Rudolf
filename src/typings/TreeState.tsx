@@ -23,7 +23,3 @@ export type NodeGenerator = (
 ) => FormulaNode[]
 
 export type OpenLeafNode = FormulaNode & { forest: [] }
-
-export type ClosedLeafNode = FormulaNode & { forest: ContradictionNode }
-
-export type FinishedLeafNode = FormulaNode & { forest: FinishedNode }
