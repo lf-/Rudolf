@@ -1,0 +1,604 @@
+
+{
+  "header": {
+    "reportVersion": 1,
+    "event": "Allocation failed - JavaScript heap out of memory",
+    "trigger": "FatalError",
+    "filename": "report.20200210.191335.2923.0.001.json",
+    "dumpEventTime": "2020-02-10T19:13:35Z",
+    "dumpEventTimeStamp": "1581390815681",
+    "processId": 2923,
+    "cwd": "/home/tano/code/Rudolf",
+    "commandLine": [
+      "/home/tano/.nvm/versions/node/v12.14.1/bin/node",
+      "--max-old-space-size=2048",
+      "/home/tano/code/Rudolf/node_modules/fork-ts-checker-webpack-plugin/lib/service.js"
+    ],
+    "nodejsVersion": "v12.14.1",
+    "glibcVersionRuntime": "2.30",
+    "glibcVersionCompiler": "2.17",
+    "wordSize": 64,
+    "arch": "x64",
+    "platform": "linux",
+    "componentVersions": {
+      "node": "12.14.1",
+      "v8": "7.7.299.13-node.16",
+      "uv": "1.33.1",
+      "zlib": "1.2.11",
+      "brotli": "1.0.7",
+      "ares": "1.15.0",
+      "modules": "72",
+      "nghttp2": "1.40.0",
+      "napi": "5",
+      "llhttp": "2.0.1",
+      "http_parser": "2.8.0",
+      "openssl": "1.1.1d",
+      "cldr": "35.1",
+      "icu": "64.2",
+      "tz": "2019c",
+      "unicode": "12.1"
+    },
+    "release": {
+      "name": "node",
+      "lts": "Erbium",
+      "headersUrl": "https://nodejs.org/download/release/v12.14.1/node-v12.14.1-headers.tar.gz",
+      "sourceUrl": "https://nodejs.org/download/release/v12.14.1/node-v12.14.1.tar.gz"
+    },
+    "osName": "Linux",
+    "osRelease": "4.19.98-1-MANJARO",
+    "osVersion": "#1 SMP Thu Jan 23 10:34:28 UTC 2020",
+    "osMachine": "x86_64",
+    "cpus": [
+      {
+        "model": "Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz",
+        "speed": 3403,
+        "user": 33765600,
+        "nice": 24400,
+        "sys": 8003100,
+        "idle": 930137800,
+        "irq": 2138800
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz",
+        "speed": 3455,
+        "user": 35883400,
+        "nice": 78000,
+        "sys": 8415500,
+        "idle": 2602300,
+        "irq": 654000
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz",
+        "speed": 3400,
+        "user": 31981100,
+        "nice": 24000,
+        "sys": 7509400,
+        "idle": 2638500,
+        "irq": 7266700
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz",
+        "speed": 3413,
+        "user": 34025900,
+        "nice": 30500,
+        "sys": 8206000,
+        "idle": 2544300,
+        "irq": 800600
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz",
+        "speed": 3433,
+        "user": 35896300,
+        "nice": 29500,
+        "sys": 7762600,
+        "idle": 1901000,
+        "irq": 582600
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz",
+        "speed": 3404,
+        "user": 34912800,
+        "nice": 21600,
+        "sys": 8447700,
+        "idle": 2576000,
+        "irq": 1517600
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz",
+        "speed": 3410,
+        "user": 35826800,
+        "nice": 18800,
+        "sys": 8156400,
+        "idle": 2785700,
+        "irq": 1840600
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz",
+        "speed": 3491,
+        "user": 36905800,
+        "nice": 31300,
+        "sys": 8116500,
+        "idle": 1920300,
+        "irq": 596600
+      }
+    ],
+    "networkInterfaces": [
+      {
+        "name": "lo",
+        "internal": true,
+        "mac": "00:00:00:00:00:00",
+        "address": "127.0.0.1",
+        "netmask": "255.0.0.0",
+        "family": "IPv4"
+      },
+      {
+        "name": "wlp2s0",
+        "internal": false,
+        "mac": "9c:b6:d0:f8:9d:d1",
+        "address": "10.0.0.64",
+        "netmask": "255.255.255.0",
+        "family": "IPv4"
+      },
+      {
+        "name": "lo",
+        "internal": true,
+        "mac": "00:00:00:00:00:00",
+        "address": "::1",
+        "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+        "family": "IPv6",
+        "scopeid": 0
+      },
+      {
+        "name": "wlp2s0",
+        "internal": false,
+        "mac": "9c:b6:d0:f8:9d:d1",
+        "address": "2604:3d08:547d:afa0::4fca",
+        "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+        "family": "IPv6",
+        "scopeid": 0
+      },
+      {
+        "name": "wlp2s0",
+        "internal": false,
+        "mac": "9c:b6:d0:f8:9d:d1",
+        "address": "2604:3d08:547d:afa0:6cc9:bffa:1a16:e0d",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 0
+      },
+      {
+        "name": "wlp2s0",
+        "internal": false,
+        "mac": "9c:b6:d0:f8:9d:d1",
+        "address": "fe80::8fd0:3c23:9eb2:ecd5",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 2
+      }
+    ],
+    "host": "vera"
+  },
+  "javascriptStack": {
+    "message": "No stack.",
+    "stack": [
+      "Unavailable."
+    ]
+  },
+  "nativeStack": [
+    {
+      "pc": "0x0000000000b05ba5",
+      "symbol": "report::TriggerNodeReport(v8::Isolate*, node::Environment*, char const*, char const*, std::string const&, v8::Local<v8::String>) [/home/tano/.nvm/versions/node/v12.14.1/bin/node]"
+    },
+    {
+      "pc": "0x00000000009dbd93",
+      "symbol": "node::OnFatalError(char const*, char const*) [/home/tano/.nvm/versions/node/v12.14.1/bin/node]"
+    },
+    {
+      "pc": "0x0000000000b3b18e",
+      "symbol": "v8::Utils::ReportOOMFailure(v8::internal::Isolate*, char const*, bool) [/home/tano/.nvm/versions/node/v12.14.1/bin/node]"
+    },
+    {
+      "pc": "0x0000000000b3b509",
+      "symbol": "v8::internal::V8::FatalProcessOutOfMemory(v8::internal::Isolate*, char const*, bool) [/home/tano/.nvm/versions/node/v12.14.1/bin/node]"
+    },
+    {
+      "pc": "0x0000000000ce68a5",
+      "symbol": " [/home/tano/.nvm/versions/node/v12.14.1/bin/node]"
+    },
+    {
+      "pc": "0x0000000000ce6f36",
+      "symbol": "v8::internal::Heap::RecomputeLimits(v8::internal::GarbageCollector) [/home/tano/.nvm/versions/node/v12.14.1/bin/node]"
+    },
+    {
+      "pc": "0x0000000000cf2dca",
+      "symbol": "v8::internal::Heap::PerformGarbageCollection(v8::internal::GarbageCollector, v8::GCCallbackFlags) [/home/tano/.nvm/versions/node/v12.14.1/bin/node]"
+    },
+    {
+      "pc": "0x0000000000cf3cd5",
+      "symbol": "v8::internal::Heap::CollectGarbage(v8::internal::AllocationSpace, v8::internal::GarbageCollectionReason, v8::GCCallbackFlags) [/home/tano/.nvm/versions/node/v12.14.1/bin/node]"
+    },
+    {
+      "pc": "0x0000000000cf66e8",
+      "symbol": "v8::internal::Heap::AllocateRawWithRetryOrFail(int, v8::internal::AllocationType, v8::internal::AllocationAlignment) [/home/tano/.nvm/versions/node/v12.14.1/bin/node]"
+    },
+    {
+      "pc": "0x0000000000cbd017",
+      "symbol": "v8::internal::Factory::NewFillerObject(int, bool, v8::internal::AllocationType) [/home/tano/.nvm/versions/node/v12.14.1/bin/node]"
+    },
+    {
+      "pc": "0x0000000000ff307b",
+      "symbol": "v8::internal::Runtime_AllocateInYoungGeneration(int, unsigned long*, v8::internal::Isolate*) [/home/tano/.nvm/versions/node/v12.14.1/bin/node]"
+    },
+    {
+      "pc": "0x0000000001376259",
+      "symbol": " [/home/tano/.nvm/versions/node/v12.14.1/bin/node]"
+    }
+  ],
+  "javascriptHeap": {
+    "totalMemory": 2153373696,
+    "totalCommittedMemory": 2151949488,
+    "usedMemory": 2127943576,
+    "availableMemory": 48984408,
+    "memoryLimit": 2197815296,
+    "heapSpaces": {
+      "read_only_space": {
+        "memorySize": 262144,
+        "committedMemory": 32568,
+        "capacity": 261872,
+        "used": 32296,
+        "available": 229576
+      },
+      "new_space": {
+        "memorySize": 2097152,
+        "committedMemory": 1338024,
+        "capacity": 1047488,
+        "used": 353368,
+        "available": 694120
+      },
+      "old_space": {
+        "memorySize": 2031464448,
+        "committedMemory": 2031238544,
+        "capacity": 2011295392,
+        "used": 2008723768,
+        "available": 2571624
+      },
+      "code_space": {
+        "memorySize": 2260992,
+        "committedMemory": 2051552,
+        "capacity": 1862976,
+        "used": 1862976,
+        "available": 0
+      },
+      "map_space": {
+        "memorySize": 790528,
+        "committedMemory": 790368,
+        "capacity": 600800,
+        "used": 600800,
+        "available": 0
+      },
+      "large_object_space": {
+        "memorySize": 116449280,
+        "committedMemory": 116449280,
+        "capacity": 116366816,
+        "used": 116366816,
+        "available": 0
+      },
+      "code_large_object_space": {
+        "memorySize": 49152,
+        "committedMemory": 49152,
+        "capacity": 3552,
+        "used": 3552,
+        "available": 0
+      },
+      "new_large_object_space": {
+        "memorySize": 0,
+        "committedMemory": 0,
+        "capacity": 1047488,
+        "used": 0,
+        "available": 1047488
+      }
+    }
+  },
+  "resourceUsage": {
+    "userCpuSeconds": 143.925,
+    "kernelCpuSeconds": 3.80066,
+    "cpuConsumptionPercent": 95.9259,
+    "maxRss": 2313940992,
+    "pageFaults": {
+      "IORequired": 0,
+      "IONotRequired": 914921
+    },
+    "fsActivity": {
+      "reads": 0,
+      "writes": 16
+    }
+  },
+  "uvthreadResourceUsage": {
+    "userCpuSeconds": 81.8994,
+    "kernelCpuSeconds": 1.34688,
+    "cpuConsumptionPercent": 54.056,
+    "fsActivity": {
+      "reads": 0,
+      "writes": 16
+    }
+  },
+  "libuv": [
+  ],
+  "environmentVariables": {
+    "npm_package_jest_testEnvironment": "jest-environment-jsdom-fourteen",
+    "SHELL": "/usr/bin/zsh",
+    "LSCOLORS": "Gxfxcxdxbxegedabagacad",
+    "SESSION_MANAGER": "local/vera:@/tmp/.ICE-unix/921,unix/vera:/tmp/.ICE-unix/921",
+    "COLORTERM": "truecolor",
+    "npm_package_dependencies_dotenv_expand": "5.1.0",
+    "npm_package_dependencies_babel_plugin_named_asset_import": "^0.3.6",
+    "npm_package_jest_transform__________js_jsx_ts_tsx_css_json___": "<rootDir>/config/jest/fileTransform.js",
+    "npm_package_dependencies__types_react": "^16.8.23",
+    "LESS": "-R",
+    "npm_package_jest_transform_______js_jsx_ts_tsx__": "<rootDir>/node_modules/babel-jest",
+    "npm_package_dependencies_fs_extra": "^8.1.0",
+    "XDG_SESSION_PATH": "/org/freedesktop/DisplayManager/Session0",
+    "npm_package_jest_moduleNameMapper__react_native_": "react-native-web",
+    "GNOME_DESKTOP_SESSION_ID": "this-is-deprecated",
+    "npm_package_dependencies_eslint_plugin_promise": "^4.2.1",
+    "npm_package_browserslist_development_0": "last 1 chrome version",
+    "npm_package_browserslist_development_1": "last 1 firefox version",
+    "npm_package_browserslist_development_2": "last 1 safari version",
+    "npm_package_dependencies_identity_obj_proxy": "3.0.0",
+    "NODE": "/home/tano/.nvm/versions/node/v12.14.1/bin/node",
+    "npm_config_ignore_scripts": "",
+    "LC_ADDRESS": "en_CA.UTF-8",
+    "LC_NAME": "en_CA.UTF-8",
+    "SSH_AUTH_SOCK": "/run/user/1000/keyring/ssh",
+    "GRADLE_HOME": "/usr/share/java/gradle",
+    "npm_package_dependencies_case_sensitive_paths_webpack_plugin": "2.3.0",
+    "npm_package_scripts_eslint_check": "eslint --print-config ./src/App.tsx | eslint-config-prettier-check",
+    "npm_config_browser": "firefox",
+    "npm_package_private": "true",
+    "npm_package_jest_watchPlugins_1": "jest-watch-typeahead/testname",
+    "npm_package_jest_watchPlugins_0": "jest-watch-typeahead/filename",
+    "npm_package_dependencies_jest_resolve": "24.9.0",
+    "npm_package_jest_testMatch_1": "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}",
+    "npm_package_jest_testMatch_0": "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
+    "npm_config_argv": "{\"remain\":[],\"cooked\":[\"run\",\"start\"],\"original\":[\"start\"]}",
+    "npm_package_dependencies_webpack": "4.41.5",
+    "npm_config_bin_links": "true",
+    "DESKTOP_SESSION": "cinnamon",
+    "LC_MONETARY": "en_CA.UTF-8",
+    "npm_package_dependencies_eslint_plugin_react": "7.18.0",
+    "npm_package_dependencies_eslint_loader": "3.0.3",
+    "npm_package_dependencies_postcss_flexbugs_fixes": "4.1.0",
+    "EDITOR": "/usr/bin/nano",
+    "GTK_MODULES": "canberra-gtk-module",
+    "XDG_SEAT": "seat0",
+    "npm_package_dependencies_eslint_config_prettier": "^6.0.0",
+    "PWD": "/home/tano/code/Rudolf",
+    "npm_config_save_prefix": "^",
+    "LOGNAME": "tano",
+    "XDG_SESSION_DESKTOP": "cinnamon",
+    "QT_QPA_PLATFORMTHEME": "qt5ct",
+    "XDG_SESSION_TYPE": "x11",
+    "npm_package_readmeFilename": "README.md",
+    "npm_package_dependencies_react": "^16.8.6",
+    "npm_package_dependencies_react_app_polyfill": "^1.0.6",
+    "npm_package_scripts_build": "node scripts/build.js",
+    "_": "/tmp/yarn--1581390659912-0.27482254202840606/node",
+    "XAUTHORITY": "/home/tano/.Xauthority",
+    "npm_package_dependencies_style_loader": "1.1.3",
+    "npm_package_dependencies_ts_optchain": "^0.1.7",
+    "XDG_GREETER_DATA_DIR": "/var/lib/lightdm-data/tano",
+    "npm_package_dependencies__typescript_eslint_eslint_plugin": "^2.10.0",
+    "GTK2_RC_FILES": "/home/tano/.gtkrc-2.0",
+    "HOME": "/home/tano",
+    "npm_package_jest_transformIgnorePatterns_1": "^.+\\.module\\.(css|sass|scss)$",
+    "npm_config_version_git_tag": "true",
+    "LC_PAPER": "en_CA.UTF-8",
+    "LANG": "en_CA.UTF-8",
+    "npm_package_jest_transformIgnorePatterns_0": "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
+    "npm_package_dependencies__types_react_dom": "16.8.4",
+    "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:",
+    "XDG_CURRENT_DESKTOP": "X-Cinnamon",
+    "npm_config_init_license": "MIT",
+    "npm_package_babel_presets_0": "react-app",
+    "npm_package_version": "0.1.0",
+    "npm_package_dependencies_sass_loader": "8.0.2",
+    "npm_package_dependencies__material_ui_core": "^4.5.0",
+    "npm_package_dependencies_jest": "24.9.0",
+    "npm_package_dependencies_babel_preset_react_app": "^9.1.1",
+    "VTE_VERSION": "5803",
+    "npm_package_dependencies_babel_eslint": "10.0.3",
+    "npm_config_version_commit_hooks": "true",
+    "npm_package_dependencies_react_dev_utils": "^10.1.0",
+    "npm_package_dependencies_camelcase": "^5.3.1",
+    "XDG_SEAT_PATH": "/org/freedesktop/DisplayManager/Seat0",
+    "npm_package_dependencies__material_ui_icons": "^4.2.1",
+    "npm_package_dependencies_styled_components": "^4.3.2",
+    "npm_package_dependencies_postcss_loader": "3.0.0",
+    "npm_package_dependencies_babel_jest": "^24.9.0",
+    "INIT_CWD": "/home/tano/code/Rudolf",
+    "npm_package_dependencies_eslint": "^6.6.0",
+    "npm_lifecycle_script": "node scripts/start.js",
+    "npm_package_description": "In the project directory, you can run:",
+    "npm_package_dependencies_pnp_webpack_plugin": "1.6.0",
+    "npm_package_dependencies_webpack_manifest_plugin": "2.2.0",
+    "NVM_DIR": "/home/tano/.nvm",
+    "npm_package_dependencies_eslint_plugin_react_hooks": "^1.6.1",
+    "npm_config_version_tag_prefix": "v",
+    "YARN_WRAP_OUTPUT": "false",
+    "npm_package_dependencies_immer_reducer": "^0.7.10",
+    "npm_package_dependencies_ts_pnp": "1.1.5",
+    "npm_package_dependencies_react_input_autosize": "^2.2.2",
+    "XDG_SESSION_CLASS": "user",
+    "npm_package_dependencies_eslint_plugin_flowtype": "4.6.0",
+    "TERM": "xterm-256color",
+    "LC_IDENTIFICATION": "en_CA.UTF-8",
+    "npm_package_name": "my-app",
+    "ZSH": "/home/tano/.oh-my-zsh",
+    "npm_package_dependencies__types_node": "^12.0.12",
+    "GTK_OVERLAY_SCROLLING": "1",
+    "USER": "tano",
+    "npm_package_jest_setupFiles_0": "react-app-polyfill/jsdom",
+    "npm_package_dependencies_node_sass": "^4.12.0",
+    "npm_package_jest_collectCoverageFrom_0": "src/**/*.{js,jsx,ts,tsx}",
+    "npm_package_jest_collectCoverageFrom_1": "!src/**/*.d.ts",
+    "npm_package_dependencies_optimize_css_assets_webpack_plugin": "5.0.3",
+    "npm_package_dependencies_react_bootstrap": "^1.0.0-beta.10",
+    "npm_package_dependencies_babel_loader": "8.0.6",
+    "npm_package_dependencies_react_dom": "^16.8.6",
+    "npm_package_dependencies_react_bootstrap_modal": "^4.2.0",
+    "npm_package_dependencies_dotenv": "8.2.0",
+    "DISPLAY": ":0",
+    "npm_package_dependencies_postcss_preset_env": "6.7.0",
+    "npm_lifecycle_event": "start",
+    "SHLVL": "1",
+    "npm_package_dependencies_workbox_webpack_plugin": "4.3.1",
+    "npm_config_version_git_sign": "",
+    "NVM_CD_FLAGS": "-q",
+    "npm_package_dependencies__babel_core": "7.8.4",
+    "npm_config_version_git_message": "v%s",
+    "PAGER": "less",
+    "LC_TELEPHONE": "en_CA.UTF-8",
+    "npm_package_dependencies__svgr_webpack": "4.3.3",
+    "npm_package_dependencies_jest_environment_jsdom_fourteen": "1.0.1",
+    "npm_package_jest_moduleFileExtensions_8": "jsx",
+    "npm_package_jest_moduleFileExtensions_9": "node",
+    "npm_package_jest_moduleFileExtensions_0": "web.js",
+    "npm_package_jest_moduleFileExtensions_1": "js",
+    "npm_package_jest_moduleFileExtensions_2": "web.ts",
+    "LC_MEASUREMENT": "en_CA.UTF-8",
+    "npm_package_jest_moduleFileExtensions_3": "ts",
+    "npm_package_dependencies_serve": "^11.0.2",
+    "npm_package_jest_moduleFileExtensions_4": "web.tsx",
+    "XDG_VTNR": "7",
+    "npm_package_jest_moduleFileExtensions_5": "tsx",
+    "npm_package_jest_moduleFileExtensions_6": "json",
+    "npm_package_jest_moduleFileExtensions_7": "web.jsx",
+    "DESKTOP_AUTOSTART_ID": "10e0f6d3dfc1f77c48158092714816309400000009210040",
+    "XDG_SESSION_ID": "2",
+    "npm_package_dependencies_eslint_plugin_jsx_a11y": "6.2.3",
+    "npm_config_user_agent": "yarn/1.21.1 npm/? node/v12.14.1 linux x64",
+    "npm_package_scripts_lint": "yarn eslint --ext '.ts,.tsx' src --fix",
+    "npm_package_jest_transform______css_": "<rootDir>/config/jest/cssTransform.js",
+    "npm_package_dependencies_eslint_plugin_import": "2.20.0",
+    "npm_package_dependencies_bootstrap": "^4.3.1",
+    "npm_package_dependencies__typescript_eslint_parser": "^2.10.0",
+    "npm_package_dependencies__types_react_input_autosize": "^2.0.1",
+    "npm_execpath": "/home/tano/.yarn/bin/yarn.js",
+    "npm_package_dependencies_semver": "6.3.0",
+    "npm_package_dependencies_eslint_config_react_app": "^5.2.0",
+    "MOZ_PLUGIN_PATH": "/usr/lib/mozilla/plugins",
+    "npm_package_scripts_test": "node scripts/test.js",
+    "XDG_RUNTIME_DIR": "/run/user/1000",
+    "npm_config_strict_ssl": "true",
+    "npm_package_dependencies_resolve": "1.15.0",
+    "npm_package_dependencies_css_loader": "3.4.2",
+    "LC_TIME": "en_CA.UTF-8",
+    "npm_package_scripts_ts": "yarn tsc --watch",
+    "npm_package_dependencies_postcss_normalize": "8.0.1",
+    "npm_package_dependencies_html_webpack_plugin": "4.0.0-beta.11",
+    "npm_package_dependencies_file_loader": "4.3.0",
+    "npm_package_dependencies_typescript": "^3.7.2",
+    "npm_package_dependencies__types_jest": "^24.0.23",
+    "npm_package_jest_moduleNameMapper______module___css_sass_scss__": "identity-obj-proxy",
+    "GDK_BACKEND": "x11",
+    "npm_package_browserslist_production_2": "not op_mini all",
+    "npm_package_scripts_start": "node scripts/start.js",
+    "npm_package_browserslist_production_0": ">0.2%",
+    "npm_package_browserslist_production_1": "not dead",
+    "PATH": "/tmp/yarn--1581390659912-0.27482254202840606:/home/tano/code/Rudolf/node_modules/.bin:/home/tano/.config/yarn/link/node_modules/.bin:/home/tano/.nvm/versions/node/v12.14.1/libexec/lib/node_modules/npm/bin/node-gyp-bin:/home/tano/.nvm/versions/node/v12.14.1/lib/node_modules/npm/bin/node-gyp-bin:/home/tano/.nvm/versions/node/v12.14.1/bin/node_modules/npm/bin/node-gyp-bin:/home/tano/.avn/bin:/home/tano/.yarn/bin:/home/tano/.config/yarn/global/node_modules/.bin:/home/tano/.nvm/versions/node/v12.14.1/bin:/home/tano/.elan/bin:/home/tano/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+    "__avn_active_file": "",
+    "GDMSESSION": "cinnamon",
+    "npm_package_dependencies_url_loader": "2.3.0",
+    "npm_package_dependencies_resolve_url_loader": "3.1.1",
+    "SAL_USE_VCLPLUGIN": "gtk",
+    "npm_package_dependencies_jest_watch_typeahead": "0.4.2",
+    "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus",
+    "npm_package_dependencies_mini_css_extract_plugin": "0.9.0",
+    "npm_package_dependencies_postcss_safe_parser": "4.0.1",
+    "npm_package_dependencies_ts_essentials": "^3.0.0",
+    "NVM_BIN": "/home/tano/.nvm/versions/node/v12.14.1/bin",
+    "MAIL": "/var/spool/mail/tano",
+    "npm_config_registry": "https://registry.yarnpkg.com",
+    "npm_package_dependencies_terser_webpack_plugin": "2.3.4",
+    "npm_config_ignore_optional": "",
+    "npm_package_dependencies_webpack_dev_server": "3.10.1",
+    "npm_node_execpath": "/home/tano/.nvm/versions/node/v12.14.1/bin/node",
+    "npm_package_jest_roots_0": "<rootDir>/src",
+    "NPM_TOKEN": "6626ef1b-80bc-451d-9d59-754ba82e6fbf",
+    "LC_NUMERIC": "en_CA.UTF-8",
+    "npm_package_dependencies_react_lineto": "^3.1.3",
+    "OLDPWD": "/home/tano/code/Rudolf",
+    "npm_package_eslintConfig_extends": "react-app",
+    "npm_config_init_version": "1.0.0",
+    "BABEL_ENV": "development",
+    "NODE_ENV": "development",
+    "NODE_PATH": "",
+    "WEBPACK_DEV_SERVER": "true",
+    "TYPESCRIPT_PATH": "/home/tano/code/Rudolf/node_modules/typescript/lib/typescript.js",
+    "TSCONFIG": "/home/tano/code/Rudolf/tsconfig.json",
+    "COMPILER_OPTIONS": "{}",
+    "TSLINT": "",
+    "CONTEXT": "/home/tano/code/Rudolf",
+    "TSLINTAUTOFIX": "false",
+    "ESLINT": "false",
+    "ESLINT_OPTIONS": "{}",
+    "WATCH": "",
+    "WORK_DIVISION": "1",
+    "MEMORY_LIMIT": "2048",
+    "CHECK_SYNTACTIC_ERRORS": "true",
+    "USE_INCREMENTAL_API": "true",
+    "VUE": "{\"compiler\":\"vue-template-compiler\",\"enabled\":false}"
+  },
+  "userLimits": {
+    "core_file_size_blocks": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "data_seg_size_kbytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "file_size_blocks": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "max_locked_memory_bytes": {
+      "soft": 65536,
+      "hard": 65536
+    },
+    "max_memory_size_kbytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "open_files": {
+      "soft": 524288,
+      "hard": 524288
+    },
+    "stack_size_bytes": {
+      "soft": 8388608,
+      "hard": "unlimited"
+    },
+    "cpu_time_seconds": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "max_user_processes": {
+      "soft": 63326,
+      "hard": 63326
+    },
+    "virtual_memory_kbytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    }
+  },
+  "sharedObjects": [
+    "linux-vdso.so.1",
+    "/usr/lib/libdl.so.2",
+    "/usr/lib/libstdc++.so.6",
+    "/usr/lib/libm.so.6",
+    "/usr/lib/libgcc_s.so.1",
+    "/usr/lib/libpthread.so.0",
+    "/usr/lib/libc.so.6",
+    "/lib64/ld-linux-x86-64.so.2"
+  ]
+}
